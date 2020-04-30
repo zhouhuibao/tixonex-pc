@@ -1,6 +1,6 @@
 # tixonex-pc
 
-## 下载以来
+## 下载项目依赖
 ```
 yarn install
 ```
