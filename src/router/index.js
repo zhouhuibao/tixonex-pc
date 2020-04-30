@@ -5,7 +5,8 @@ import Home from '../views/Home.vue'
 Vue.use(VueRouter)
 
   const routes = [
-  {
+  
+    {
     path: '/',
     name: 'Home',
     components: {
@@ -16,7 +17,7 @@ Vue.use(VueRouter)
     children: [
       {
         path: 'content',
-        name: '用户管理',
+        name: 'content',
         component: () => import('@/views/Content'),
         meta: { title: '用户管理'}
       },
@@ -29,11 +30,19 @@ Vue.use(VueRouter)
       default:() => import('@/views/About'),
       mainHead:() => import('@/components/mainHeader'),
     }
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-  }
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404')
+  },
+  { path: '*', redirect: '/404' }
 ]
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+  return originalPush.call(this, location).catch(err => err)
+}
 
 const router = new VueRouter({
   routes

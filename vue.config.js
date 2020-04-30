@@ -26,15 +26,6 @@ module.exports = {
           },
         }
     },
-    // css: {
-    //     loaderOptions: {
-    //       scss:{
-    //         globalVars: {
-    //           primary: '#fff'
-    //         }
-    //       }
-    //     }
-    //   }
-
     
 }
+
