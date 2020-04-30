@@ -1,16 +1,16 @@
 # tixonex-pc
 
-## Project setup
+## 下载以来
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### 项目启动
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
+### 项目打包
 ```
 yarn build
 ```
