@@ -1,0 +1,48 @@
+@import "./reset.css";
+
+.pull-left {
+    float: left !important;
+}
+.pull-right {
+    float: left !important;
+}
+
+.clearfix {
+    &:after {
+      visibility: hidden;
+      display: block;
+      font-size: 0;
+      content: " ";
+      clear: both;
+      height: 0;
+    }
+}
+
+.userContent{
+    .el-form-item__content{
+        line-height: normal;
+    }
+    .submitbtn{
+        border: none;
+        .el-button--primary{
+            width: 100%;
+            background: #2E54EB;
+            color: #fff;
+        }
+    }
+}
+
+.tixonex-container{
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+// .noData{
+    .el-table__empty-text{
+        line-height: normal;
+    }
+// }
+
+// .el-dropdown-menu{
+//     display: block !important;
+// }
