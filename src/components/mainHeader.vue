@@ -87,7 +87,6 @@ export default {
         }
       }
     },
-    
     mounted(){
       this.getlang(this.lang)
       this.setnavList()
@@ -105,11 +104,11 @@ export default {
             },
             {
               name:this.$t('header.fbjy'),
-              path:'/OTC'
+              path:'/OTC/OTC-list'
             },
             {
               name:this.$t('header.zcgl'),
-              path:'/MyBalance'
+              path:'/MyBalance/MyAssets'
             },
             {
               name:this.$t('header.zhzx'),

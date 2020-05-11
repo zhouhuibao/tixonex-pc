@@ -34,20 +34,70 @@ Vue.use(VueRouter)
     {
       path: '/MyBalance',
       name: 'MyBalance',
+      redirect: '/MyBalance/MyAssets',
       components: {
         default:() => import('@/views/MyBalance/index'),
         mainHead:() => import('@/components/mainHeader'),
         mainFooter:() => import('@/components/mainFooter')
-      }
+      },
+      children: [
+        {
+          path: 'MyAssets',
+          name: 'MyAssets',
+          component: () => import('@/views/MyBalance/MyAssets/index'),
+        },
+        {
+          path: 'TradingAssets',
+          name: 'TradingAssets',
+          component: () => import('@/views/MyBalance/TradingAssets/index'),
+        }
+        
+      ]
+    },
+    {
+      path: '/withdrawal-address',
+      name: 'WithdrawalAddress',
+      components: {
+        default:() => import('@/views/MyBalance/WithdrawalAddress/index'),
+        mainHead:() => import('@/components/mainHeader'),
+        mainFooter:() => import('@/components/mainFooter')
+      },
+    },
+    {
+      path: '/Order-Manage',
+      name: 'Order-Manage',
+      components: {
+        default:() => import('@/views/MyBalance/WithdrawalAddress/index'),
+        mainHead:() => import('@/components/mainHeader'),
+        mainFooter:() => import('@/components/mainFooter')
+      },
     },
     {
       path: '/OTC',
       name: 'OTC',
+      redirect: '/OTC/OTC-list',
       components: {
         default:() => import('@/views/OTC/index'),
         mainHead:() => import('@/components/mainHeader'),
         mainFooter:() => import('@/components/mainFooter')
-      }
+      },
+      children: [
+        {
+          path: 'OTC-list',
+          name: 'OTCList',
+          component: () => import('@/views/OTC/OTCList/index'),
+        },
+        {
+          path: 'OTC-order-list',
+          name: 'OTCOrderList',
+          component: () => import('@/views/OTC/OrderList/index'),
+        },
+        {
+          path: 'OTC-posters-list',
+          name: 'OTCPostersList',
+          component: () => import('@/views/OTC/PostersList/index'),
+        },
+      ]
     },
     {
       path: '/Personal',

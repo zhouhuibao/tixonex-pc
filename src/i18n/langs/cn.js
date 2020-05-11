@@ -3,6 +3,10 @@ import header from './cn/header'
 import footer from './cn/footer'
 import home from './cn/home'
 import user from './cn/user'
+import OTC from './cn/OTC'
+import MyBalance from './cn/MyBalance'
+import PostersList from './cn/PostersList'
+
 const cn = {
     message: {
         'hello': '你好，世界',
@@ -12,6 +16,9 @@ const cn = {
     footer,
     home,
     user,
+    OTC,
+    PostersList,
+    MyBalance,
     ...zhLocale
 }
 

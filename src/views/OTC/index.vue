@@ -1,13 +1,5 @@
 <template>
-  <div>OTC</div>
+  <div style="background:#fff">
+      <router-view></router-view>
+  </div>
 </template>
-
-<script>
-export default {
-    nameL:'OTC'
-}
-</script>
-
-<style>
-
-</style>

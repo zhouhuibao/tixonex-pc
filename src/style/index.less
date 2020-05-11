@@ -1,4 +1,4 @@
-@import "./reset.css";
+@import "./layui.css";
 
 .pull-left {
     float: left !important;
@@ -43,6 +43,96 @@
     }
 // }
 
-// .el-dropdown-menu{
-//     display: block !important;
-// }
+.contentTop{
+    .bizhong{
+        .el-input__inner{
+            border-radius: 15px;
+        }
+    }
+}
+.page{
+    border: 1px solid #ccc;
+    margin-right: 20px;
+    border-radius:4px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+}
+
+.otcList{
+
+    .el-pagination .btn-next, .el-pagination .btn-prev{
+        background: center center no-repeat #f5f2f0;
+        .page;
+    }
+    .el-pagination .btn-prev,.el-pagination .btn-next{
+        padding: 0;
+    }
+    .el-dialog, .el-pager li{
+        background:#f5f2f0;
+        border: 1px solid #ccc;
+        margin-right: 20px;
+        border-radius:4px;
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+    }
+    .el-pagination__editor.el-input .el-input__inner{
+        .page
+    }
+    .el-pager li.active+li{
+        border: 1px solid #ccc;
+    }
+    .el-pagination button, .el-pagination span:not([class*=suffix]){
+        height: 40px;
+        line-height: 40px;
+    }
+}
+
+
+.modalWrapper{
+    .el-dialog{
+        border-radius: 10px;
+    }
+    .el-dialog__body{
+        padding:0 40px 40px 40px;
+        
+    }
+    .el-dialog__header{
+        height: 40px;
+    }
+    .closeImg{
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        img{
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+        }
+    }
+}
+
+.prBtn{
+    color: #2E54EB;
+    border: 0;
+    border:1px solid #2E54EB;
+    background: #fff;
+    padding: 7px 13px;
+    border-radius:4px;
+    cursor: pointer;
+}
+
+.askModal{
+    .el-dialog__header{
+        padding: 0;
+    }
+    .el-dialog__body{
+        padding: 60px 0 60px 0;
+    }
+    .title{
+        margin-bottom: 80px;
+    }
+}
