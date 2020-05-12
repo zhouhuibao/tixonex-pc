@@ -6,6 +6,7 @@ import user from './en/user'
 import OTC from './en/OTC'
 import MyBalance from './en/MyBalance'
 import PostersList from './en/PostersList'
+import Personal from './en/Personal'
 
 const en = {
     message: {
@@ -17,6 +18,7 @@ const en = {
     user,
     home,
     OTC,
+    Personal,
     PostersList,
     MyBalance,
     ...enLocale

@@ -98,15 +98,46 @@ Vue.use(VueRouter)
           component: () => import('@/views/OTC/PostersList/index'),
         },
       ]
+      
     },
     {
       path: '/Personal',
       name: 'Personal',
+      redirect: '/OTC/OTC-list',
       components: {
         default:() => import('@/views/Personal/index'),
         mainHead:() => import('@/components/mainHeader'),
         mainFooter:() => import('@/components/mainFooter')
-      }
+      },
+      children: [
+        {
+          path: 'Personal-center',
+          name: 'PersonalCenter',
+          component: () => import('@/views/Personal/PersonalCenter/index'),
+        },
+        {
+          path: 'Real-Name-authentication',
+          name: 'RealNameAuthentication',
+          component: () => import('@/views/Personal/RealNameAuthentication/index'),
+        },
+        {
+          path: 'google-verify',
+          name: 'googleVerify',
+          component: () => import('@/views/Personal/googleVerify/index'),
+        },
+        {
+          path: 'pay-type',
+          name: 'payType',
+          component: () => import('@/views/Personal/payType/index'),
+        },
+        {
+          path: 'login-log',
+          name: 'LoginLog',
+          component: () => import('@/views/Personal/LoginLog/index'),
+        }
+      ]
+      
+
     },
     {
       path: '/user',

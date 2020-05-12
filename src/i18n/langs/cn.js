@@ -6,6 +6,7 @@ import user from './cn/user'
 import OTC from './cn/OTC'
 import MyBalance from './cn/MyBalance'
 import PostersList from './cn/PostersList'
+import Personal from './cn/Personal'
 
 const cn = {
     message: {
@@ -17,6 +18,7 @@ const cn = {
     home,
     user,
     OTC,
+    Personal,
     PostersList,
     MyBalance,
     ...zhLocale

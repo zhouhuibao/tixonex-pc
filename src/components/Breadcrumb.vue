@@ -24,8 +24,7 @@ export default {
 <style lang='less' scoped>
     .bar{
         background: #fff;
-        padding: 20px 0 20px 20px;
-        margin: 50px 0 27px 0;
+        padding: 20px 0 20px 0;
         font-size: 20px;
         .BreadItem{
             display: inline-block;

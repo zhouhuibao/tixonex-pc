@@ -1,6 +1,6 @@
 <template>
   <div class="layui-container">
-      <Breadcrumb :list="routerList" />
+      <Breadcrumb :list="routerList" style="margin-bottom:27px;padding-top:60px;" />
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="类型">
             <el-select v-model="formInline.region" placeholder="全部">

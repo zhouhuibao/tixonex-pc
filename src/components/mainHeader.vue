@@ -112,7 +112,7 @@ export default {
             },
             {
               name:this.$t('header.zhzx'),
-              path:'/Personal'
+              path:'/Personal/Personal-center'
             }
         ]
         this.navList = navList
