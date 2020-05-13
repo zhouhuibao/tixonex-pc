@@ -1,7 +1,7 @@
 <template>
   <div class="RealNameAuthentication">
-      <div class="layui-container">
         <Breadcrumb :list="routerList" />
+      <div class="layui-container">
         <div class="layui-row ">
             <div class="layui-col-md10 layui-col-md-offset1 layui-col-xs12">
                 <div class="tips clearfix">
@@ -67,7 +67,6 @@ export default {
     name:'payType',
     data () {
         return {
-            routerList:[],
             form: {
                 name: '',
             },
@@ -77,28 +76,8 @@ export default {
             AliPayVisible:false
         }
     },
-    components:{
-        Breadcrumb,
-        Bank,
-        AliPay,
-        WeChat
-    },
-    watch:{
-      '$i18n.locale':{
-        deep:true,
-        handler(newVal){
-          this.setnavList()
-        }
-      }
-    },
-    mounted(){
-      this.setnavList()
-    },
-    methods:{
-        close(v,type){
-            this[type] =v
-        },
-        setnavList(){
+    computed:{
+        routerList(){
             const navList=[
                 {
                     name:this.$t('Personal.zhzx'),
@@ -108,7 +87,20 @@ export default {
                     name:this.$t('Personal.zffs'),
                 }
             ]
-            this.routerList = navList
+            return navList
+        }
+    },
+    
+    components:{
+        Breadcrumb,
+        Bank,
+        AliPay,
+        WeChat
+    },
+   
+    methods:{
+        close(v,type){
+            this[type] =v
         },
         onSubmit() {
             console.log('submit!');

@@ -78,7 +78,7 @@
             align="center"
           >
             <template>
-              <button class="buy">购买</button>
+              <button class="buy" @click="BuyVisible = true">购买</button>
             </template>
           </el-table-column>
           <template slot="empty">
@@ -102,8 +102,8 @@
    
 
         
-     <issue-order :visible="IssueOrderVisible" @close="closeIssueOrder"></issue-order> 
-
+     <issue-order :visible="IssueOrderVisible" @close="(v)=>{close(v,'IssueOrderVisible')}"></issue-order> 
+     <Buy :visible="BuyVisible" @close="(v)=>{close(v,'BuyVisible')}"></Buy> 
         
   </div>
 </template>
@@ -111,11 +111,13 @@
 <script>
 import TableEmpty from '@/components/TableEmpty.vue'
 import IssueOrder from './../Components/IssueOrder'
+import Buy from './../Components/Buy'
 export default {
     nameL:'OTCList',
     data () {
       return {
         IssueOrderVisible:false,
+        BuyVisible:false,
         value:'',
         currentPage3: 5,
         coinArr:[
@@ -133,7 +135,8 @@ export default {
     },
     components: {
       TableEmpty,
-      IssueOrder
+      IssueOrder,
+      Buy
     },
     mounted(){
       const arr = [];
@@ -169,8 +172,8 @@ export default {
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
-      closeIssueOrder(v){
-        this.IssueOrderVisible = v
+      close(v,type){
+        this[type] = v
       }
     }
 }

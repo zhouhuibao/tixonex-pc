@@ -1,7 +1,7 @@
 <template>
   <div class="RealNameAuthentication">
+    <Breadcrumb :list="routerList" />
       <div class="layui-container">
-        <Breadcrumb :list="routerList" />
         <div class="realNameContainer">
             <div class="title">
                 <img src="./../../../../public/img/tixonexImages/baozhang.png" alt="">
@@ -75,7 +75,6 @@ export default {
     name:'RealNameAuthentication',
     data () {
         return {
-            routerList:[],
             form: {
                 name: '',
             }      
@@ -84,19 +83,8 @@ export default {
     components:{
         Breadcrumb
     },
-    watch:{
-      '$i18n.locale':{
-        deep:true,
-        handler(newVal){
-          this.setnavList()
-        }
-      }
-    },
-    mounted(){
-      this.setnavList()
-    },
-    methods:{
-        setnavList(){
+    computed:{
+        routerList(){
             const navList=[
                 {
                     name:this.$t('Personal.zhzx'),
@@ -106,8 +94,12 @@ export default {
                     name:this.$t('Personal.smrz'),
                 }
             ]
-            this.routerList = navList
-        },
+            return navList
+        }
+    },
+    
+    methods:{
+        
         onSubmit() {
             console.log('submit!');
         }

@@ -1,6 +1,8 @@
 <template>
+<div>
+
+    <Breadcrumb :list="routerList" style="margin-bottom:27px;" />
   <div class="layui-container">
-      <Breadcrumb :list="routerList" style="margin-bottom:27px;padding-top:60px;" />
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="类型">
             <el-select v-model="formInline.region" placeholder="全部">
@@ -70,7 +72,7 @@
             align="center"
         >
             <template>
-              <button class="prBtn">订单详情</button>
+              <router-link  class="prBtn" to="/OTC/OTC-order-detail">订单详情</router-link>
             </template>
         </el-table-column>
         <template slot="empty">
@@ -89,6 +91,8 @@
             </el-pagination>
         </div>
   </div>
+</div>
+
 </template>
 
 <script>
@@ -98,7 +102,6 @@ export default {
     name:'orderLIst',
     data () {
         return {
-            routerList:[],
             currentPage3: 5,
             formInline: {
                 user: '',
@@ -107,16 +110,22 @@ export default {
             tableData:[]
         }
     },
-    watch:{
-      '$i18n.locale':{
-        deep:true,
-        handler(newVal){
-          this.setnavList()
+    computed:{
+        routerList(){
+            const navList=[
+                {
+                    name:this.$t('OTC.gdlb'),
+                    path:'/OTC/OTC-list'
+                },
+                {
+                    name:this.$t('OTC.ddgl'),
+                }
+            ]
+            return navList
         }
-      }
     },
+    
     mounted(){
-      this.setnavList()
       const arr = [];
       for(let i=0;i<10;i+=1){
         const obj ={};
@@ -137,18 +146,7 @@ export default {
         TableEmpty  
     },
     methods:{
-        setnavList(){
-            const navList=[
-                {
-                    name:this.$t('OTC.gdlb'),
-                    path:'/OTC/OTC-list'
-                },
-                {
-                    name:this.$t('OTC.ddgl'),
-                }
-            ]
-            this.routerList = navList
-        },
+        
         onSubmit() {
             console.log('submit!');
         },

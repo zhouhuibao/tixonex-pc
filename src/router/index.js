@@ -97,6 +97,11 @@ Vue.use(VueRouter)
           name: 'OTCPostersList',
           component: () => import('@/views/OTC/PostersList/index'),
         },
+        {
+          path: 'OTC-order-detail',
+          name: 'OTCOrderDetail',
+          component: () => import('@/views/OTC/OTCOrderDetail/index'),
+        },
       ]
       
     },

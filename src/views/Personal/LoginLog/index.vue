@@ -1,8 +1,8 @@
 <template>
     <div style="background:#fff;">
+    <Breadcrumb :list="routerList" style="margin-bottom:40px" />
 
         <div class="layui-container">
-            <Breadcrumb :list="routerList" style="margin-bottom:40px" />
             <el-table
             :data="tableData"
             style="width: 100%">
@@ -54,7 +54,6 @@ export default {
     name:'orderLIst',
     data () {
         return {
-            routerList:[],
             currentPage3: 5,
             formInline: {
                 user: '',
@@ -63,16 +62,21 @@ export default {
             tableData:[]
         }
     },
-    watch:{
-      '$i18n.locale':{
-        deep:true,
-        handler(newVal){
-          this.setnavList()
+    computed:{
+        routerList(){
+            const navList=[
+                {
+                name:this.$t('Personal.zhzx'),
+                path:'/Personal/Personal-center'
+            },
+            {
+                name:this.$t('Personal.ddrz'),
+            }
+            ]
+            return navList
         }
-      }
     },
     mounted(){
-      this.setnavList()
       const arr = [];
       for(let i=0;i<10;i+=1){
         const obj ={};
@@ -89,18 +93,7 @@ export default {
         TableEmpty  
     },
     methods:{
-        setnavList(){
-            const navList=[
-                {
-                    name:this.$t('Personal.zhzx'),
-                    path:'/Personal/Personal-center'
-                },
-                {
-                    name:this.$t('Personal.ddrz'),
-                }
-            ]
-            this.routerList = navList
-        },
+        
         onSubmit() {
             console.log('submit!');
         },

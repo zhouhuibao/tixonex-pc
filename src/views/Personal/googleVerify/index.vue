@@ -1,7 +1,7 @@
 <template>
   <div class="RealNameAuthentication">
-      <div class="layui-container">
         <Breadcrumb :list="routerList" />
+      <div class="layui-container">
         <div class="layui-row ">
             <div class="layui-col-md6 layui-col-md-offset3 layui-col-xs12">
                 <div class="tips clearfix">
@@ -65,29 +65,14 @@ export default {
     name:'googleVerify',
     data () {
         return {
-            routerList:[],
             form: {
                 name: '',
             },
             code:''      
         }
     },
-    components:{
-        Breadcrumb
-    },
-    watch:{
-      '$i18n.locale':{
-        deep:true,
-        handler(newVal){
-          this.setnavList()
-        }
-      }
-    },
-    mounted(){
-      this.setnavList()
-    },
-    methods:{
-        setnavList(){
+    computed:{
+        routerList(){
             const navList=[
                 {
                     name:this.$t('Personal.zhzx'),
@@ -97,8 +82,14 @@ export default {
                     name:this.$t('Personal.ggyzq'),
                 }
             ]
-            this.routerList = navList
-        },
+            return navList
+        }
+    },
+    components:{
+        Breadcrumb
+    },
+    methods:{
+        
         onSubmit() {
             console.log('submit!');
         }

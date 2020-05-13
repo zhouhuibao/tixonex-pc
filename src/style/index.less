@@ -116,6 +116,7 @@
 }
 
 .prBtn{
+    display: inline-block;
     color: #2E54EB;
     border: 0;
     border:1px solid #2E54EB;
@@ -123,6 +124,9 @@
     padding: 7px 13px;
     border-radius:4px;
     cursor: pointer;
+    &:hover{
+        color: #2E54EB;
+    }
 }
 
 .defaultBtn{
@@ -130,6 +134,10 @@
     padding: 15px 0;
     background: #2E54EB;
     color: #fff;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
 }
 
 .askModal{
@@ -139,10 +147,17 @@
     .el-dialog__body{
         padding: 60px 0 60px 0;
     }
+    .el-dialog{
+        border-radius: 10px;
+    }
     .title{
         margin-bottom: 80px;
     }
 }
+
+// .el-table th, .el-table tr{
+//     background: #f5f2f0 !important;
+// }
 
 .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
