@@ -9,11 +9,8 @@
             <ul class="navList clearfix hidden-md-and-down" >
               
               <li v-for="(item,index) in navList" :key="index">
-                <router-link :to="item.path" exact>
-                  <!-- {{item[`name_${lang}`]}} -->
-                  {{item.name}}
-
-                </router-link>
+                <router-link v-if="item.path==='/'" exact  active-class="myactive" :to="item.path">{{item.name}}</router-link>
+                <router-link v-else :to="item.path">{{item.name}}</router-link>
               </li>
             </ul>
             <i class="hidden-md-and-up el-icon-s-operation"></i>
@@ -104,15 +101,15 @@ export default {
             },
             {
               name:this.$t('header.fbjy'),
-              path:'/OTC/OTC-list'
+              path:'/OTC'
             },
             {
               name:this.$t('header.zcgl'),
-              path:'/MyBalance/MyAssets'
+              path:'/MyBalance'
             },
             {
               name:this.$t('header.zhzx'),
-              path:'/Personal/Personal-center'
+              path:'/Personal'
             }
         ]
         this.navList = navList
@@ -163,6 +160,10 @@ export default {
   // margin: 0 auto;
   height: 100px;
   display: flex;
+
+  .nav-item.active{
+  color: #1a8bf4;
+}
   
   .headerNav{
     flex: 1;

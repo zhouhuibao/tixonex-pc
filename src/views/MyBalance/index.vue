@@ -15,7 +15,9 @@
         </div>
       </div>
       <div style="padding:30px 0 300px 0">
-        <router-view></router-view>
+        <transition name="fade">
+          <router-view></router-view>
+        </transition>
       </div>
     </div>
   </div>

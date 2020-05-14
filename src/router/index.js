@@ -42,6 +42,7 @@ Vue.use(VueRouter)
       },
       children: [
         {
+          
           path: 'MyAssets',
           name: 'MyAssets',
           component: () => import('@/views/MyBalance/MyAssets/index'),
@@ -108,7 +109,7 @@ Vue.use(VueRouter)
     {
       path: '/Personal',
       name: 'Personal',
-      redirect: '/OTC/OTC-list',
+      redirect: '/Personal/Personal-center',
       components: {
         default:() => import('@/views/Personal/index'),
         mainHead:() => import('@/components/mainHeader'),

@@ -1,5 +1,7 @@
 <template>
   <div style="background:#fff">
-      <router-view></router-view>
+      <transition name="fade">
+        <router-view></router-view>
+      </transition>
   </div>
 </template>

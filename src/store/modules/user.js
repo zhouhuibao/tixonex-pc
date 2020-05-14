@@ -1,6 +1,10 @@
 const state = {
   device: 'desktop',
-  test:''
+  test:'',
+  woc:'woc1',
+  testArr:{
+    name:'测试名称2'
+  }
 }
 
 const mutations = {
