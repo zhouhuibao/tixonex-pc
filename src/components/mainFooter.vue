@@ -50,7 +50,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
   .footerWrapper{
     background: #061339;
     padding: 50px 0 35px;

@@ -34,7 +34,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
   p{
     text-align: center;
     color: #666666;

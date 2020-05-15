@@ -118,7 +118,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
     .RealNameAuthentication{
         padding-bottom: 100px;
         .realNameContainer{

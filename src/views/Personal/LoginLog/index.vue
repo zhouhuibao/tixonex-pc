@@ -108,7 +108,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 .elpage{
     margin-top: 80px;
     text-align: center;

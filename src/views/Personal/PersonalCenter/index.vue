@@ -120,7 +120,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
   .Personal{
     background: #fff;
     padding-bottom: 140px;

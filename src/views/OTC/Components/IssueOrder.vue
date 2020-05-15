@@ -111,7 +111,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
     .btnWrap{
         text-align: center;
         .button{

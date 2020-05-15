@@ -59,7 +59,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
     .title{
         text-align: center;
         color: #333333;

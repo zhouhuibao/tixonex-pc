@@ -52,7 +52,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 .tab{
   border-bottom: 1px solid #CCCCCC;
   margin-bottom: 20px;

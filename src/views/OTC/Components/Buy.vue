@@ -92,7 +92,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 .modalWrapper{
    .title{
         font-size: 18px;

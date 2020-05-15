@@ -219,7 +219,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
     .btnWrap{
         span{
             color: #2E54EB;

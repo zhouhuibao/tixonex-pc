@@ -104,7 +104,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
     .userContent{
         .title{
             color: #333333;

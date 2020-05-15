@@ -58,14 +58,14 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 
-.borderBg{
+@mixin borderBg() {
     border: 1px solid #ccc;
     background: #fff;
 }
 
-@fontColor:#333;
+
 
 .exchangeCenter{
     padding: 70px 90px;
@@ -73,9 +73,9 @@ export default {
         height: 70px;
         line-height: 70px;
         padding-left: 15px;
-        color: @fontColor;
+        color: $fontColor;
         font-size: 16px;
-        .borderBg;
+        @include borderBg;
     }
     .usdtTitle{
         color: #3156EB;
@@ -85,12 +85,12 @@ export default {
     }
     .usdtContent{
         height: 580px;
-        .borderBg;
+        @include borderBg;
         .contentTop{
             height: 77px;
             line-height: 77px;
             font-size: 14px;
-            color:@fontColor ;
+            color:$fontColor ;
             text-align: center;
             .bizhong{
                 .el-input{
