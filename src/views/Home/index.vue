@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <el-carousel height="400px" :interval="2000" >
+    <el-carousel height="450px" :interval="2000" >
       <el-carousel-item v-for="item in banner" :key="item">
         <img :src="item" alt="">
       </el-carousel-item>
@@ -56,7 +56,7 @@
             align="center"
             :label="$t('home.qjy')"
           >
-            <template slot-scope="scope"> <el-button >去交易</el-button> </template>
+            <template slot-scope="scope"> <el-button>去交易</el-button> </template>
           </el-table-column>
           <template slot="empty">
             <TableEmpty></TableEmpty>
@@ -117,7 +117,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
   .home{
     .usdtTitle{
       text-align: center;
@@ -163,7 +163,7 @@ export default {
 
   .el-carousel__item img {
     width: 100%;
-    min-height: 400px;
+    min-height: 450px;
   }
 
 

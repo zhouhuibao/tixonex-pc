@@ -34,7 +34,7 @@ Vue.use(VueRouter)
     {
       path: '/MyBalance',
       name: 'MyBalance',
-      redirect: '/MyBalance/MyAssets',
+      redirect: '/MyBalance/MyBalance-container/MyAssets',
       components: {
         default:() => import('@/views/MyBalance/index'),
         mainHead:() => import('@/components/mainHeader'),
@@ -42,28 +42,43 @@ Vue.use(VueRouter)
       },
       children: [
         {
-          
-          path: 'MyAssets',
-          name: 'MyAssets',
-          component: () => import('@/views/MyBalance/MyAssets/index'),
+          path: 'MyBalance-container',
+          name: 'MyBalanceContainer',
+          component: () => import('@/views/MyBalance/Container'),
+          children: [
+            {
+              
+              path: 'MyAssets',
+              name: 'MyAssets',
+              component: () => import('@/views/MyBalance/MyAssets/index'),
+            },
+            {
+              path: 'TradingAssets',
+              name: 'TradingAssets',
+              component: () => import('@/views/MyBalance/TradingAssets/index'),
+            }
+            
+          ]
         },
         {
-          path: 'TradingAssets',
-          name: 'TradingAssets',
-          component: () => import('@/views/MyBalance/TradingAssets/index'),
+          path: 'withdrawal-address',
+          name: 'WithdrawalAddress',
+          component: () => import('@/views/MyBalance/WithdrawalAddress/index'),
+        },
+        {
+          path: 'cb-histoty',
+          name: 'CbHistory',
+          component: () => import('@/views/MyBalance/CbHistory/index'),
+        },
+        {
+          path: 'tb-histoty',
+          name: 'TbHistory',
+          component: () => import('@/views/MyBalance/TbHistory/index'),
         }
         
       ]
     },
-    {
-      path: '/withdrawal-address',
-      name: 'WithdrawalAddress',
-      components: {
-        default:() => import('@/views/MyBalance/WithdrawalAddress/index'),
-        mainHead:() => import('@/components/mainHeader'),
-        mainFooter:() => import('@/components/mainFooter')
-      },
-    },
+    
     {
       path: '/Order-Manage',
       name: 'Order-Manage',

@@ -184,7 +184,7 @@ export default {
           }
         }
         .currentActive{
-        color: #1a8bf4;
+        color: #2E54EB;
         }
       }
     }

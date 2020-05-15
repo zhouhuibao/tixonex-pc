@@ -53,7 +53,7 @@
                 <div class="layui-col-xs8">
                     <div class="title">充币地址</div>
                     <div class="address">GSDU56q5w1as4asdqw4d <span><i class="iconfont iconfuzhi"></i>复制</span></div>
-                    <div class="lock">查看<span>充币记录</span>跟踪状态</div>
+                    <div class="lock">查看<span  @click="goRouter('/MyBalance/cb-histoty')">充币记录</span>跟踪状态</div>
                 </div>
                 <div class="layui-col-xs4">
                     <div class="title">二维码</div>
@@ -146,7 +146,7 @@
                     </div>
                     <div style="text-align:center">
                             <div class="defaultBtn">提币</div>
-                            <p style="margin-top:10px">查看 <span style="color:#2E54EB;cursor:pointer">提币记录</span> 跟踪状态</p>
+                            <p style="margin-top:10px">查看 <span @click="goRouter('/MyBalance/tb-histoty')" style="color:#2E54EB;cursor:pointer">提币记录</span> 跟踪状态</p>
                         </div>
                 </el-form>
             </div>
@@ -207,6 +207,10 @@ export default {
                 this.$refs.refTable.toggleRowExpansion(item, false)
             })
             this.$refs.refTable.toggleRowExpansion(row)
+        },
+        goRouter(path){
+            console.log(path)
+            this.$router.push(path)
         },
         onSubmit() {
         console.log('submit!');

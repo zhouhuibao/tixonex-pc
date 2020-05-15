@@ -1,78 +1,37 @@
 <template>
-<div>
+<div style="background:#fff">
 
     <Breadcrumb :list="routerList" style="margin-bottom:27px;" />
   <div class="layui-container">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="类型">
-            <el-select v-model="formInline.region" placeholder="全部">
-            <el-option label="类型一" value="shanghai"></el-option>
-            <el-option label="类型二" value="beijing"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="订单状态">
-            <el-select v-model="formInline.region" placeholder="全部">
-            <el-option label="订单状态一" value="shanghai"></el-option>
-            <el-option label="订单状态二" value="beijing"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="交易币种">
-            <el-select v-model="formInline.region" placeholder="全部">
-            <el-option label="交易币种一" value="shanghai"></el-option>
-            <el-option label="交易币种二" value="beijing"></el-option>
-            </el-select>
-        </el-form-item>
-        </el-form>
+      
         <el-table
         :data="tableData"
         style="width: 100%">
         <el-table-column
             prop="address1"
-            label="订单编号"
-            width="180">
-        </el-table-column>
-        <el-table-column
-            prop="address2"
-            label="创建时间"
-            width="180">
+            label="来源"
+        >
         </el-table-column>
         <el-table-column
             prop="address3"
-            label="支付方式"
-            align="center"
+            label="转入数量"
         >
-            <template>
-              <img src="./../../../../public/img/tixonexImages/yinhangka.png" alt="">
-            </template>
         </el-table-column>
         <el-table-column
             prop="address4"
-            label="交易对象">
+            label="转入币种">
         </el-table-column>
         <el-table-column
             prop="address5"
-            label="支付币种">
-        </el-table-column>
-        <el-table-column
-            prop="address6"
-            label="交易币种">
-        </el-table-column>
-        <el-table-column
-            prop="address7"
-            label="类型">
+            width="170px"
+            label="转入时间">
         </el-table-column>
         <el-table-column
             prop="address8"
-            label="订单状态">
-        </el-table-column>
-        <el-table-column
-            prop="address9"
-            label="操作"
-            width="120px"
-            align="center"
-        >
-            <template>
-              <router-link  class="prBtn" to="/OTC/OTC-order-detail">订单详情</router-link>
+            width="330px"
+            label="转入hash">
+            <template slot-scope="{row}">
+                {{row.address8}} <span class="copy"><i class="iconfont iconfuzhi"></i>复制</span>
             </template>
         </el-table-column>
         <template slot="empty">
@@ -82,12 +41,13 @@
 
         <div class="elpage otcList">
             <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="currentPage3"
-            :page-size="10"
-            layout="prev, pager, next, jumper"
-            :total="100">
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage3"
+                :page-size="10"
+                layout="prev, pager, next, jumper"
+                :total="100"
+            >
             </el-pagination>
         </div>
   </div>
@@ -99,7 +59,7 @@
 import TableEmpty from '@/components/TableEmpty.vue'
 import Breadcrumb from '@/components/Breadcrumb'
 export default {
-    name:'CbHistory',
+    name:'TbHistory',
     data () {
         return {
             currentPage3: 5,
@@ -107,18 +67,23 @@ export default {
                 user: '',
                 region: ''
             },
-            tableData:[]
+            tableData:[],
+            value:''
         }
     },
     computed:{
         routerList(){
             const navList=[
                 {
-                    name:this.$t('OTC.gdlb'),
-                    path:'/OTC/OTC-list'
+                    name:this.$t('MyBalance.zcgl'),
+                    path:'/MyBalance'
                 },
                 {
-                    name:this.$t('OTC.ddgl'),
+                    name:this.$t('MyBalance.wdzc'),
+                    path:'/MyBalance'
+                },
+                {
+                    name:this.$t('MyBalance.cbjl'),
                 }
             ]
             return navList
@@ -129,14 +94,11 @@ export default {
       const arr = [];
       for(let i=0;i<10;i+=1){
         const obj ={};
-        obj.address1 = '1332472309483054';
-        obj.address2 = '2020-11-08 18:34:19';
-        obj.address3 = '100 TSH';
-        obj.address4 = '13812902000';
-        obj.address5 = '100 CNY';
-        obj.address6 = '100 TSH';
-        obj.address7 = '买入';
-        obj.address8 = '已完成';
+        obj.address1 = '12345678989';
+        obj.address3 = '100';
+        obj.address4 = 'TSH';
+        obj.address5 = '2020-11-08 18:38:28';
+        obj.address8 = 'NDIEHSFINES;F;DSLFMLRGORS';
         arr.push(obj)
       }
       this.tableData = arr
@@ -168,6 +130,19 @@ export default {
     .el-pagination{
       white-space:normal;
 
+    }
+}
+.copy{
+    display: inline-block;
+    margin-left: 10px;
+    cursor: pointer;
+    padding: 3px 7px;
+    border: 1px solid #E2E8FF;
+    color: #2E54EB;
+    font-size: 14px;
+    border-radius: 4px;
+    i{
+        margin-right: 5px;
     }
 }
 

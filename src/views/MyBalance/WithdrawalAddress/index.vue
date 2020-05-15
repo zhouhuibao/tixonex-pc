@@ -1,7 +1,7 @@
 <template>
   <div class="layui-container">
     <div class="bar">
-      <router-link to="/MyBalance/MyAssets">我的资产</router-link>
+      <router-link to="/MyBalance/MyBalance-container/MyAssets">我的资产</router-link>
         <i class="el-icon-arrow-right"></i>
       <span>提币地址管理</span>
     </div>
