@@ -1,19 +1,20 @@
 <template>
-    <div style="background:#fff;padding:30px 0 300px 0">
-        <div class="layui-container">
+    <div>
+      <div class="bg"></div>
+        <div class="layui-container" style="padding-bottom:300px">
             <div class="layui-row">
                 <div class="layui-col-md6">
                     <div class="nav clearfix">
                         <router-link v-for="(item,index) in navList" :key="index" :to='item.path' @click="changeCoin(item)">{{item.name}}</router-link>
                     </div>
                 </div>
-                <div class="layui-col-md6">
+                <div class="layui-col-md6" v-if="currentPath === '/MyBalance/MyBalance-container/MyAssets'">
                     <div class="tbdzgl">
                         <router-link to="/MyBalance/withdrawal-address">提币地址管理</router-link>
                     </div>
                 </div>
             </div>
-            <div style="padding-top:30px">
+            <div style="padding-top:38px">
                 <transition name="fade">
                     <router-view></router-view>
                 </transition>
@@ -37,8 +38,21 @@ export default {
             path:'/MyBalance/MyBalance-container/TradingAssets',
           }
         ],
+        currentPath:'',
       }
     },
+    created(){
+      this.currentPath = this.$route.path
+    },
+    watch:{
+      '$route':{
+        handler(newVal){
+          this.currentPath = newVal.path
+        },
+        deep:true
+      }
+    },
+    
     methods:{
       changeCoin(record){
         this.navList.forEach(item=>{
@@ -53,8 +67,18 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+.bg{
+  height: 50px;
+  background: $bgColor;
+  margin-bottom: 40px;
+}
 .nav{
+  width: 490px;
+  height: 60px;
+  border-radius:35px;
+  overflow: hidden;
+  background: $bgColor;
     a{
       width:245px;
       height:60px;
@@ -65,6 +89,8 @@ export default {
       text-align: center;
       cursor: pointer;
     }
+
+
     .myactive{
       background:rgba(46,84,235,1);
       border-radius:35px;

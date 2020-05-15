@@ -4,8 +4,8 @@
         <p>订单对方已支付，付款参考号239290437230958-345-3490</p>
         <img src="./../../../../../public/img/tixonexImages/test.jpg" alt="">
         <div class="btnWrap">
-          <div class="defaultBtn" @click="SubmitComplaintVisible = true">提交申诉</div>
-          <div class="defaultBtn" @click="releaseVisible = true">到账无误，确认放行</div>
+          <el-button type="info" @click="SubmitComplaintVisible = true">提交申诉</el-button>
+          <el-button type="primary" @click="releaseVisible = true">到账无误，确认放行</el-button>
         </div>
       </div>
       
@@ -39,7 +39,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 p{
     text-align: center;
     color: #666666;
@@ -73,5 +73,11 @@ img{
 .box{
   text-align: center;
  
+}
+</style>
+
+<style scoped>
+.btnWrap /deep/ .el-button{
+  width: 170px;
 }
 </style>

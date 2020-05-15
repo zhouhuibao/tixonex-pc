@@ -120,7 +120,6 @@ export default {
 
 <style lang='less' scoped>
     .RealNameAuthentication{
-        background: #f5f2f0;
         padding-bottom: 100px;
         .realNameContainer{
             .title{

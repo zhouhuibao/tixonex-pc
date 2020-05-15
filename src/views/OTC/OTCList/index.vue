@@ -1,16 +1,17 @@
 <template>
   <div class="otc">
+    <div class="bg"></div>
     <div class="layui-container">
       <div class="layui-row otc-top">
         <div class="layui-col-md6">
           <div class="layui-row">
-            <div class="layui-col-xs6">
+            <div class="layui-col-xs4">
               <div class="mc">卖出</div>
               <div class="nav">
                 <span v-for="(item,index) in coinArr" :key="index" :class="item.checked ? 'active' : ''" @click="changeCoin(item)">{{item.name}}</span>
               </div>
             </div>
-            <div class="layui-col-xs6" style="padding-top:40px">
+            <div class="layui-col-xs8" style="padding-top:40px">
               <el-select v-model="value" placeholder="支付货币CNY">
                   <el-option
                     v-for="item in 3"
@@ -24,9 +25,9 @@
         </div>
         <div class="layui-col-md6">
           <div class="orderBtn" style="padding-top:40px">
-            <el-button @click="IssueOrderVisible = true">发布订单</el-button>
-            <el-button @click="pushRouter('/OTC/OTC-order-list')">订单管理</el-button>
-            <el-button @click="pushRouter('/OTC/OTC-posters-list')">挂单管理</el-button>
+            <el-button type="info" @click="IssueOrderVisible = true">发布订单</el-button>
+            <el-button type="info" @click="pushRouter('/OTC/OTC-order-list')">订单管理</el-button>
+            <el-button type="info" @click="pushRouter('/OTC/OTC-posters-list')">挂单管理</el-button>
           </div>
             
         </div>
@@ -78,7 +79,8 @@
             align="center"
           >
             <template>
-              <button class="buy" @click="BuyVisible = true">购买</button>
+              <el-button @click="BuyVisible = true" type="primary">购买</el-button>
+              <!-- <button class="buy" ></button> -->
             </template>
           </el-table-column>
           <template slot="empty">
@@ -87,8 +89,9 @@
         </el-table>
       </div>
       
-      <div class="elpage otcList">
+      <div class="elpage">
         <el-pagination
+          background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage3"
@@ -180,12 +183,17 @@ export default {
 </script>
 
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .otc{
-  background: #fff;
-  margin-top: 40px;
+  .bg{
+    background: $bgColor;
+    height: 50px;
+    width: 100%;
+  }
   .otc-top{
     padding-bottom: 24px;
+    border-bottom: 1px solid $borderColor;
+    margin-bottom: 30px;
     .mc{
       color: #2E54EB;
       font-size: 16px;

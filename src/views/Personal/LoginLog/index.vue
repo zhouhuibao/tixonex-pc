@@ -35,6 +35,7 @@
 
             <div class="elpage otcList">
                 <el-pagination
+                background
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page.sync="currentPage3"

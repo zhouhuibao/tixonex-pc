@@ -9,8 +9,15 @@
             <ul class="navList clearfix hidden-md-and-down" >
               
               <li v-for="(item,index) in navList" :key="index">
-                <router-link v-if="item.path==='/'" exact  active-class="myactive" :to="item.path">{{item.name}}</router-link>
-                <router-link v-else :to="item.path">{{item.name}}</router-link>
+                <router-link v-if="item.path==='/'" exact  active-class="myactive" :to="item.path">
+                  {{item.name}}
+                  <div class="sub"></div>
+                </router-link>
+                <router-link v-else :to="item.path">
+                  {{item.name}}
+                  <div class="sub"></div>
+                </router-link>
+                
               </li>
             </ul>
             <i class="hidden-md-and-up el-icon-s-operation"></i>
@@ -24,10 +31,16 @@
         <div class="infoItem"></div>
         <div class="infoItem"></div>
         <div class="infoItem">
-          <router-link to="/user/login" exact>{{$t('header.login')}}</router-link>
+          <router-link to="/user/login" style="display:block;font-size:16px;" exact>
+            {{$t('header.login')}}
+            <div class="sub"></div>
+          </router-link>
         </div>
         <div class="infoItem">
-          <router-link to="/user/register" exact>{{$t('header.register')}}</router-link>
+          <router-link to="/user/register" style="display:block;font-size:16px;" exact>
+            {{$t('header.register')}}
+            <div class="sub"></div>
+          </router-link>
         </div>
         <div class="infoItem">
           <el-dropdown  @command="handleCommand">
@@ -154,16 +167,12 @@ export default {
 
 
 
-<style scoped lang='less'>
+<style scoped lang='scss'>
+
 .mainHeader{
-  // max-width: 1250px;
-  // margin: 0 auto;
   height: 100px;
   display: flex;
 
-  .nav-item.active{
-  color: #1a8bf4;
-}
   
   .headerNav{
     flex: 1;
@@ -171,21 +180,19 @@ export default {
     height: 100%;
     .navList{
       li{
-        float: left;margin-right: 60px;
+        float: left;
+        margin-right: 60px;
         line-height: 100px;
+        
         a{
           color: #333333;
           display: block;
-          width: 100%;
-          height: 100%;
           font-size: 16px;
           &:hover{
-            color: #1a8bf4;
+            color: $mainColor;
           }
         }
-        .currentActive{
-        color: #2E54EB;
-        }
+        
       }
     }
     .logo{
@@ -204,9 +211,6 @@ export default {
       a{
         color: #333333;
       }
-      .currentActive{
-        color: #1a8bf4;
-        }
       &:last-child{
         margin: 0;
       }
@@ -226,17 +230,27 @@ export default {
   }
   
 
+}
 
-  /* .box{
-    width: 100px;
-    height: 100px;
-    background: red;
-  } */
+.sub{
+  position: absolute;
+  left: 50%;
+  top: 68px;
+  margin-left: -12px;
+  width: 25px;
+  border-top:1px solid #2E54EB ;
+  border-bottom:1px solid #2E54EB ;
+  display: none;
 }
 
 .myactive{
-  color: #1a8bf4 !important;
+  color: #2E54EB !important;
+  position: relative;
+  .sub{
+    display: block;
+  }
 }
+
 
 .langMenu{
   padding: 10px 0;

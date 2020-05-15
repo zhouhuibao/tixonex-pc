@@ -23,9 +23,9 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
     .bar{
-        background:#fff;border-top:1px dashed #ccc;border-bottom:1px dashed #CCCCCC;
+        background:$bgColor;
         padding: 20px 0 20px 0;
         font-size: 20px;
         .BreadItem{

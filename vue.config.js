@@ -1,15 +1,16 @@
 module.exports = {
     publicPath: './',
     lintOnSave: true,
-    chainWebpack: (config)=>{
-        config.resolve.symlinks(true)    // 热更新
-        // config.resolve.alias.set('@', resolve('src'))  // 设置@代表src路径
-    },
+    // chainWebpack: (config)=>{
+    //     config.resolve.symlinks(true)    // 热更新
+    //     // config.resolve.alias.set('@', resolve('src'))  // 设置@代表src路径
+    // },
     devServer: {
+        hot: true,
         open: true,
         proxy: {
             '/gcgj-web': {
-                target: 'http://91gcgj.com/',
+                target: 'http://91gcgj.com/',   
                 ws: true,
                 changeOrigin: true,
                 pathRewrite: {
@@ -28,8 +29,12 @@ module.exports = {
     },
     css: {
         loaderOptions: {
-            sass:{},
-            scss: {},
+            sass:{
+                data: `@import "~@/style/element-var.scss";`
+            },
+            scss: {
+                prependData: `@import "~@/style/element-var.scss";`
+            },
         }
     }
     

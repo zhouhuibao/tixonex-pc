@@ -1,6 +1,5 @@
 @import "./layui.css";
 
-@mainColor:#2E54EB;
 
 
 .pull-left {
@@ -27,6 +26,10 @@
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
 }
+
+
+
+
 
 .userContent{
     .el-form-item__content{
@@ -70,36 +73,36 @@
     line-height: 40px;
 }
 
-.otcList{
+// .otcList{
 
-    .el-pagination .btn-next, .el-pagination .btn-prev{
-        background: center center no-repeat #f5f2f0;
-        .page;
-    }
-    .el-pagination .btn-prev,.el-pagination .btn-next{
-        padding: 0;
-    }
-    .el-dialog, .el-pager li{
-        background:#f5f2f0;
-        border: 1px solid #ccc;
-        margin-right: 20px;
-        border-radius:4px;
-        width: 40px;
-        height: 40px;
-        text-align: center;
-        line-height: 40px;
-    }
-    .el-pagination__editor.el-input .el-input__inner{
-        .page
-    }
-    .el-pager li.active+li{
-        border: 1px solid #ccc;
-    }
-    .el-pagination button, .el-pagination span:not([class*=suffix]){
-        height: 40px;
-        line-height: 40px;
-    }
-}
+//     .el-pagination .btn-next, .el-pagination .btn-prev{
+//         background: center center no-repeat #f5f2f0;
+//         .page;
+//     }
+//     .el-pagination .btn-prev,.el-pagination .btn-next{
+//         padding: 0;
+//     }
+//     .el-dialog, .el-pager li{
+//         background:#f5f2f0;
+//         border: 1px solid #ccc;
+//         margin-right: 20px;
+//         border-radius:4px;
+//         width: 40px;
+//         height: 40px;
+//         text-align: center;
+//         line-height: 40px;
+//     }
+//     .el-pagination__editor.el-input .el-input__inner{
+//         .page
+//     }
+//     .el-pager li.active+li{
+//         border: 1px solid #ccc;
+//     }
+//     .el-pagination button, .el-pagination span:not([class*=suffix]){
+//         height: 40px;
+//         line-height: 40px;
+//     }
+// }
 
 
 .modalWrapper{
@@ -207,17 +210,3 @@
     border-right: 1px solid #EBEEF5;
 }
 
-/* 更改element-UI按钮样式 */
-.el-button–primary{
-    color: #fff;
-    background-color: #8B83D2;
-    border-color: #8B83D2;
-}
-.el-button–primary:hover{
-    background-color: #0ABBF9;
-    border-color: #0ABBF9;
-}
-.el-button–primary:focus{
-    background-color: #0ABBF9;
-    border-color: #0ABBF9;
-}

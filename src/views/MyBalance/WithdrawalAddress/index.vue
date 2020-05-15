@@ -1,100 +1,117 @@
 <template>
-  <div class="layui-container">
-    <div class="bar">
-      <router-link to="/MyBalance/MyBalance-container/MyAssets">我的资产</router-link>
-        <i class="el-icon-arrow-right"></i>
-      <span>提币地址管理</span>
-    </div>
-    <div class="addAddress">
-        <div class="layui-row">
-          <div class="layui-col-md2 layui-col-xs4">
-            <div class="name">币种名称</div>
-            
-            <el-select style="width:90px" v-model="value" placeholder="请选择">
-                <el-option
-                v-for="item in 6"
-                :key="item"
-                :value="item">
-                </el-option>
-            </el-select>
+  <div class="bg">
+    <div class="layui-container">
+      <div class="bar">
+        <router-link to="/MyBalance/MyBalance-container/MyAssets">我的资产</router-link>
+          <i class="el-icon-arrow-right"></i>
+        <span>提币地址管理</span>
+      </div>
+      <div class="addAddress">
+          <div class="layui-row">
+            <div class="layui-col-md2 layui-col-xs4">
+              <div class="name">币种名称</div>
+              
+              <el-select style="width:90px" v-model="value" placeholder="请选择">
+                  <el-option
+                  v-for="item in 6"
+                  :key="item"
+                  :value="item">
+                  </el-option>
+              </el-select>
 
+            </div>
+            <div class="layui-col-md5 layui-col-xs4" style="padding-right:10px">
+              <div class="name">提币地址</div>
+              
+              <el-input />
+            </div>
+            <div class="layui-col-md5 layui-col-xs4">
+              <div class="name">备注</div>
+              
+              <el-input />
+            </div>
           </div>
-          <div class="layui-col-md5 layui-col-xs4" style="padding-right:10px">
-            <div class="name">提币地址</div>
-            
-            <el-input />
+          <div class="addbtn">
+            <span>添加新地址</span>
           </div>
-          <div class="layui-col-md5 layui-col-xs4">
-            <div class="name">备注</div>
-            
-            <el-input />
-          </div>
-        </div>
-        <div class="addbtn">
-          <span>添加新地址</span>
-        </div>
-    </div>
+      </div>
 
-    <div class="addressList">
-        <div class="title">地址列表</div>
-        <el-table
-          :data="tableData"
-          style="width: 100%">
-          <el-table-column
-            prop="date"
-            label="币种名称"
-            align="center"
-            width="120"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="钱包标识"
-            align="center"
-          >
-          <template slot-scope="{row}">
-              <div v-if="row.isEdit" class="editBtn">
-                <el-input v-model="row.name" />
-              </div>
-              <div v-else class="editBtn">
-                {{row.name}}
-              </div>
-              
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="钱包地址">
+      <div class="addressList">
+          <div class="title">地址列表</div>
+          <el-table
+            :data="tableData"
+            style="width: 100%">
+            <el-table-column
+              prop="date"
+              label="币种名称"
+              align="center"
+              width="120"
+            >
             <template slot-scope="{row}">
-              <div v-if="row.isEdit" class="editBtn">
-                <el-input v-model="row.address" />
-              </div>
-              <div v-else class="editBtn">
-                {{row.address}}
-              </div>
-              
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            width="120"
-            align="center"
-          >
+                <div v-if="row.isEdit" class="editBtn">
+                  <el-select style="width:90px" v-model="row.date" placeholder="请选择">
+                      <el-option
+                      v-for="item in 6"
+                      :key="item"
+                      :value="item">
+                      </el-option>
+                  </el-select>
+                </div>
+                <div v-else class="editBtn">
+                  {{row.date}}
+                </div>
+                
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="钱包标识"
+              align="center"
+            >
             <template slot-scope="{row}">
-              <div v-if="row.isEdit" class="editBtn">
-                <span>保存</span>
-                <span @click="clickEdit(row,false)">取消</span>
-              </div>
-              <div v-else class="editBtn">
-                <span @click="clickEdit(row,true)">编辑</span>
-                <span @click="visible=true">删除</span>
-              </div>
-              
-            </template>
-          </el-table-column>
-        </el-table>
+                <div v-if="row.isEdit" class="editBtn">
+                  <el-input v-model="row.name" />
+                </div>
+                <div v-else class="editBtn">
+                  {{row.name}}
+                </div>
+                
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="address"
+              label="钱包地址">
+              <template slot-scope="{row}">
+                <div v-if="row.isEdit" class="editBtn">
+                  <el-input v-model="row.address" />
+                </div>
+                <div v-else class="editBtn">
+                  {{row.address}}
+                </div>
+                
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              width="120"
+              align="center"
+            >
+              <template slot-scope="{row}">
+                <div v-if="row.isEdit" class="editBtn">
+                  <span>保存</span>
+                  <span @click="clickEdit(row,false)">取消</span>
+                </div>
+                <div v-else class="editBtn">
+                  <span @click="clickEdit(row,true)">编辑</span>
+                  <span @click="visible=true">删除</span>
+                </div>
+                
+              </template>
+            </el-table-column>
+          </el-table>
+      </div>
+      <AskModal :visible="visible" @close="close" :title="$t('MyBalance.scdz')" />
     </div>
-    <AskModal :visible="visible" @close="close" :title="$t('MyBalance.scdz')" />
   </div>
 </template>
 
@@ -150,11 +167,15 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
+  .bg{
+    background: $bgColor;
+    padding:50px 0 60px 0;
+  }
   .bar{
     background: #fff;
     padding: 20px 0 20px 20px;
-    margin: 50px 0 27px 0;
+    margin-bottom:27px;
       font-size: 20px;
       a{
         color: #999999;
@@ -189,7 +210,6 @@ export default {
     background: #fff;
     font-size: 20px;
     color: #333;
-    margin-bottom: 60px;
     padding-bottom: 100px;
     .title{
       padding: 20px 0 20px 20px;

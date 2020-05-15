@@ -4,8 +4,7 @@ import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/display.css';
 import '@/style/element-var.scss';
 
-import '@/style/index.less'
-import '@/style/layui.css'
+import '@/style/index.scss'
 import i18n from './i18n/i18n'
 
 import App from './App.vue'
