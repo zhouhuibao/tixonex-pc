@@ -10,14 +10,14 @@
       </div>
       
 
-      <SubmitComplaint :visible="SubmitComplaintVisible" @close="(v)=>{close(v,'SubmitComplaintVisible')}" />
+      <!-- <SubmitComplaint :visible="SubmitComplaintVisible" @close="(v)=>{close(v,'SubmitComplaintVisible')}" /> -->
       <Release :visible="releaseVisible" @close="(v)=>{close(v,'releaseVisible')}" />
   </div>
 </template>
 
 <script>
 
-import SubmitComplaint from './SubmitComplaint'
+// import SubmitComplaint from './SubmitComplaint'
 import Release from './Release'
 export default {
     name:'Sell',
@@ -29,7 +29,7 @@ export default {
     },
     components:{
       Release,
-      SubmitComplaint
+      // SubmitComplaint
     },
     methods:{
       close(v,type){

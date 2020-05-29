@@ -8,24 +8,26 @@ module.exports = {
     devServer: {
         hot: true,
         open: true,
-        proxy: {
-            '/gcgj-web': {
-                target: 'http://91gcgj.com/',   
-                ws: true,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/gcgj-web': '/gcgj-web'
-                }
-            },
-            '/gcgj-fdfs': {
-              target: 'http://91gcgj.com/',
-              ws: true,
-              changeOrigin: true,
-              pathRewrite: {
-                  '^/gcgj-fdfs': '/gcgj-fdfs'
-              }
-          },
-        }
+        port:8846,
+        proxy: "http://192.168.0.109:8088"
+        // proxy: {
+        //     '/gcgj-web': {
+        //         target: 'http://91gcgj.com/',   
+        //         ws: true,
+        //         changeOrigin: true,
+        //         pathRewrite: {
+        //             '^/gcgj-web': '/gcgj-web'
+        //         }
+        //     },
+        //     '/gcgj-fdfs': {
+        //       target: 'http://91gcgj.com/',
+        //       ws: true,
+        //       changeOrigin: true,
+        //       pathRewrite: {
+        //           '^/gcgj-fdfs': '/gcgj-fdfs'
+        //       }
+        //   },
+        // }
     },
     css: {
         loaderOptions: {

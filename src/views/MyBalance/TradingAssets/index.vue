@@ -20,6 +20,7 @@
 <script>
 import DealList from '@/views/MyBalance/TradingAssets/DealList'
 import Entrust from '@/views/MyBalance/TradingAssets/Entrust'
+
 export default {
     name:'MyAssets',
     data() {

@@ -79,7 +79,7 @@ export default {
             form: {
                 name: '',
             },
-            type:'Sell'
+            type:'Done'
         }
     },
     components:{

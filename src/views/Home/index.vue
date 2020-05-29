@@ -27,31 +27,31 @@
             <template slot-scope="scope"> {{ `${scope.row.coinName}/${scope.row.settlementCurrency}` }} </template>
           </el-table-column>
           <el-table-column
-            prop="priceBeforeStat"
+            prop="lastDayPrice"
             align="center"
             :label="$t('home.zxj')"
           >
           </el-table-column>
           <el-table-column
-            prop="changeRate"
+            prop="maxIncrease"
             align="center"
             :label="$t('home.zf')"
           >
           </el-table-column>
           <el-table-column
             align="center"
-            prop="maxPrice"
+            prop="maxCurrency"
             :label="$t('home.zgj')"
           >
           </el-table-column>
           <el-table-column
-            prop="minPrice"
+            prop="minBuyPrice"
             align="center"
             :label="$t('home.zdj')"
           >
           </el-table-column>
           <el-table-column
-            prop="sumCurrency"
+            prop="maxExchangeNum"
             align="center"
             :label="$t('home.jyl')"
           >
@@ -104,11 +104,14 @@
 // @ is an alias to /src
 import Message from '@/components/Message.vue'
 import TableEmpty from '@/components/TableEmpty.vue'
+import {advertise} from '@/api/advertise'
+import {market} from '@/api/home'
 export default {
   name: 'Home',
   data() {
     return {
       tableData: [],
+      lang:localStorage.lang || 'cn',
       banner:["https://fancblock.oss-cn-shenzhen.aliyuncs.com/8d88ab6f550f6b442d57dc5a5aed6ca5.png","https://fancblock.oss-cn-shenzhen.aliyuncs.com/14e4cebf014757c55772c2d2fb17df57.png"]
     }
   },
@@ -117,8 +120,8 @@ export default {
     TableEmpty
   },
   mounted(){
-    const arr =[{"coinName":"TSH","settlementCurrency":"USDT","startTime":1588749820,"endTime":1588836220,"priceBeforeStat":0.38285700,"latestPrice":0.38142800,"latestCnyPrice":2.7081388000000000,"sumAmount":261214.00000000,"sumCurrency":98899.5065790000000000,"dealTimes":6643,"minPrice":0.37428500,"maxPrice":0.38285700,"firstPrice":0.37428500,"lastPrice":0.38142800,"changeRate":0.01908439,"coinUrl":"https://fancblock.oss-cn-shenzhen.aliyuncs.com/120.png","preArea":0,"mineArea":1,"mainArea":0,"ukzArea":0},{"coinName":"ETH","settlementCurrency":"USDT","startTime":1588749820,"endTime":1588836220,"priceBeforeStat":207.72000000,"latestPrice":204.06000000,"latestCnyPrice":1448.8260000000000000,"sumAmount":4920.34000000,"sumCurrency":1009244.5583900000000000,"dealTimes":5548,"minPrice":197.00000000,"maxPrice":210.62000000,"firstPrice":207.72000000,"lastPrice":204.06000000,"changeRate":-0.02002593,"coinUrl":"https://iblocks.oss-cn-shenzhen.aliyuncs.com/1560407498534WeChat Image_20190613143101.jpg","preArea":0,"mineArea":1,"mainArea":0,"ukzArea":0},{"coinName":"ETC","settlementCurrency":"USDT","startTime":1588749820,"endTime":1588836220,"priceBeforeStat":7.24370000,"latestPrice":6.94750000,"latestCnyPrice":49.3272500000000000,"sumAmount":11103.54000000,"sumCurrency":78700.0911801000000000,"dealTimes":5548,"minPrice":6.78800000,"maxPrice":7.31720000,"firstPrice":7.23730000,"lastPrice":6.94750000,"changeRate":-0.02920422,"coinUrl":"https://iblocks.oss-cn-shenzhen.aliyuncs.com/1560407498534WeChat Image_20190613143101.jpg","preArea":0,"mineArea":1,"mainArea":0,"ukzArea":0},{"coinName":"LTC","settlementCurrency":"USDT","startTime":1588749821,"endTime":1588836221,"priceBeforeStat":46.94000000,"latestPrice":45.79000000,"latestCnyPrice":325.1090000000000000,"sumAmount":2625.58000000,"sumCurrency":121350.0699100000000000,"dealTimes":5548,"minPrice":44.47000000,"maxPrice":47.55000000,"firstPrice":46.89000000,"lastPrice":45.79000000,"changeRate":-0.02449936,"coinUrl":"https://iblocks.oss-cn-shenzhen.aliyuncs.com/1560407498534WeChat Image_20190613143101.jpg","preArea":0,"mineArea":1,"mainArea":0,"ukzArea":0},{"coinName":"BTC","settlementCurrency":"USDT","startTime":1588749820,"endTime":1588836220,"priceBeforeStat":9020.00000000,"latestPrice":9275.00000000,"latestCnyPrice":65852.5000000000000000,"sumAmount":428.38200000,"sumCurrency":3948812.4193500000000000,"dealTimes":5547,"minPrice":8996.19000000,"maxPrice":9385.00000000,"firstPrice":9013.42000000,"lastPrice":9275.00000000,"changeRate":2.7501E-4,"coinUrl":"https://iblocks.oss-cn-shenzhen.aliyuncs.com/1560407498534WeChat Image_20190613143101.jpg","preArea":0,"mineArea":1,"mainArea":0,"ukzArea":0},{"coinName":"OMG","settlementCurrency":"USDT","startTime":1588749820,"endTime":1588836220,"priceBeforeStat":0.70560000,"latestPrice":0.69220000,"latestCnyPrice":4.9146200000000000,"sumAmount":4863.19000000,"sumCurrency":3428.6822169000000000,"dealTimes":5544,"minPrice":0.67560000,"maxPrice":0.72020000,"firstPrice":0.70560000,"lastPrice":0.69220000,"changeRate":-0.03310518,"coinUrl":"https://fancblock.oss-cn-shenzhen.aliyuncs.com/1560407498534WeChat Image_20190613143101.jpg","preArea":0,"mineArea":1,"mainArea":0,"ukzArea":0}]
-    this.tableData = arr
+    this.getAdvertiseList()
+    this.getmarketList()
   },
   methods:{
     clickUser(){
@@ -126,6 +129,29 @@ export default {
     },
     setVuex(){
       this.$store.commit('user/setTest')
+    },
+    getmarketList(){
+      market({pageNo:1,pageSize:100}).then(res=>{
+        console.log(res)
+        const {statusCode,content} = res;
+        if(statusCode === 0){
+          this.tableData = content
+        }
+      })
+    },
+    getAdvertiseList(){
+      let locale = '';
+      if(this.lang === 'cn'){
+        locale='zh_CN'
+      }else if(lang === 'en'){
+        locale='en_US'
+      }else{
+        locale='zh_TW'
+      }
+
+      advertise({locale}).then(res=>{
+        console.log(res)
+      })
     }
   }
 }

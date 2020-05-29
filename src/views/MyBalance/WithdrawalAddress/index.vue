@@ -7,33 +7,45 @@
         <span>提币地址管理</span>
       </div>
       <div class="addAddress">
-          <div class="layui-row">
-            <div class="layui-col-md2 layui-col-xs4">
-              <div class="name">币种名称</div>
-              
-              <el-select style="width:90px" v-model="value" placeholder="请选择">
-                  <el-option
-                  v-for="item in 6"
-                  :key="item"
-                  :value="item">
-                  </el-option>
-              </el-select>
+          <el-form ref="form" :rules="rules" :model="form" label-width="auto">
+            <div class="layui-row">
+              <div class="layui-col-md2 layui-col-xs4">
+                
+                <div class="name">币种名称</div>
+                <el-form-item prop="coinname">
+                    <el-select style="width:90px" class="coinWrap" v-model="form.coinname" placeholder="请选择">
+                      <el-option
+                      v-for="item in coinList"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.name" 
+                      />
+                  </el-select>
+                </el-form-item>
+                
 
+              </div>
+              <div class="layui-col-md5 layui-col-xs4" style="padding-right:10px">
+                <div class="name">提币地址</div>
+                <el-form-item prop="addr">
+                  <el-input v-model="form.addr" />
+                </el-form-item>
+
+              </div>
+              <div class="layui-col-md5 layui-col-xs4">
+                <div class="name">标识</div>
+                <el-form-item prop="name">
+                  <el-input v-model="form.name" />
+                </el-form-item>
+                
+              </div>
             </div>
-            <div class="layui-col-md5 layui-col-xs4" style="padding-right:10px">
-              <div class="name">提币地址</div>
-              
-              <el-input />
+
+            <div class="addbtn">
+              <span @click="onSubmit">添加新地址</span>
             </div>
-            <div class="layui-col-md5 layui-col-xs4">
-              <div class="name">备注</div>
-              
-              <el-input />
-            </div>
-          </div>
-          <div class="addbtn">
-            <span>添加新地址</span>
-          </div>
+          </el-form>
+
       </div>
 
       <div class="addressList">
@@ -49,16 +61,17 @@
             >
             <template slot-scope="{row}">
                 <div v-if="row.isEdit" class="editBtn">
-                  <el-select style="width:90px" v-model="row.date" placeholder="请选择">
+                  <el-select style="width:90px" class="coinWrap" v-model="row.coinName" placeholder="请选择">
                       <el-option
-                      v-for="item in 6"
-                      :key="item"
-                      :value="item">
-                      </el-option>
+                      v-for="item in coinList"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.name" 
+                      />
                   </el-select>
                 </div>
                 <div v-else class="editBtn">
-                  {{row.date}}
+                  {{row.coinName}}
                 </div>
                 
               </template>
@@ -98,33 +111,52 @@
             >
               <template slot-scope="{row}">
                 <div v-if="row.isEdit" class="editBtn">
-                  <span>保存</span>
-                  <span @click="clickEdit(row,false)">取消</span>
+                  <span @click="save(row)" style="color:#2E54EB">保存</span>
+                  <span @click="clickEdit(row,false)" style="color:#2E54EB">取消</span>
                 </div>
                 <div v-else class="editBtn">
                   <span @click="clickEdit(row,true)">编辑</span>
-                  <span @click="visible=true">删除</span>
+                  <span @click="clickDelete(row)">删除</span>
                 </div>
                 
               </template>
             </el-table-column>
           </el-table>
       </div>
-      <AskModal :visible="visible" @close="close" :title="$t('MyBalance.scdz')" />
+      <AskModal :visible="visible" @close="close" @confirm="deleteFun" :title="$t('MyBalance.scdz')"  />
     </div>
   </div>
 </template>
 
 <script>
-import { MathRandom } from '@/utils/auth';
+import { MathRandom, isEmpty } from '@/utils/auth';
 import AskModal from '@/components/AskModal';
+import {walletCoins,addAddress,updateAddress,deleteAddress,addressList} from '@/api/withdrawalAddress';
+let currentObject = {}
 export default {
   name:'WithdrawalAddress',
   data () {
     return {
-      value:'',
-      tableData:[{}],
+      tableData:[],
+      form:{
+        coinname:'',
+        name:'',
+        addr:'' 
+      },
+      rules:{
+          coinname:[
+              { required: true, message: '请选择币种', trigger: 'change' }
+          ],
+          name: [
+              { required: true, message: '请输入备注', trigger: 'blur' }
+          ],
+          addr: [
+              { required: true, message: '请输入提币地址', trigger: 'blur' }
+          ]
+      },
+      id:'',
       currentObj:{},
+      coinList:[],
       visible:false
     }
   },
@@ -132,33 +164,121 @@ export default {
     AskModal
   },
   mounted(){
-    const arr = [];
-    for(let i=0;i<10;i+=1){
-      const obj ={};
-      obj.date = 'TSH';
-      obj.name = '小张';
-      obj.address = 'NDIEHSFINES;F;DSLFML';
-      obj.id = MathRandom()
-      obj.isEdit=false;
-      arr.push(obj)
-    }
-    this.tableData = arr
-
+    this.getCoinList()
+    this.getAddressList()
   },
   methods:{
+    getCoinList(){
+      walletCoins().then(res=>{
+        const {content,statusCode} = res;
+        if(res.statusCode === 0){
+          this.coinList =content || []
+        }
+      })
+    },
+    getAddressList(){
+      addressList({pageNo:1,pageSize:50}).then(res=>{
+        const {content,statusCode} = res;
+        if(res.statusCode === 0){
+          content.forEach(item=>{
+            item.isEdit = false
+          })
+          this.tableData =content || []
+        }
+      })
+    },
+    clickDelete(row){
+      this.id = row.id;
+      this.visible =true
+    },
+    deleteFun(){
+      deleteAddress({id:this.id}).then(res=>{
+        const {statusCode} = res;
+        if(res.statusCode === 0){
+          this.$message({
+              type:'success',
+              message:'删除成功'
+          })
+          this.getAddressList()
+          this.visible =false
+        }
+
+      })
+    },
+    save(row){
+      const {coinName,address,name,id} = row
+      console.log()
+      if(isEmpty(coinName) && isEmpty(address) && isEmpty(name)){
+        const params={
+          addr:address,
+          coinname:coinName,
+          id,
+          name 
+        }
+        updateAddress(params).then(res=>{
+            if(res.statusCode === 0){
+              this.$message({
+                  type:'success',
+                  message:'修改成功'
+              })
+              this.getAddressList()
+            }
+        })
+
+      }else{
+        this.$message({
+            type:'error',
+            message:'必填项不能为空'
+        })
+      }
+    },
+    onSubmit() {
+      this.$refs.form.validate((valid) => {
+          if (valid) {
+              console.log(this.form)
+              const submitData={
+                  ...this.form,
+                  bankType:0,
+                  name:this.$store.state.user.userInfo.realName,
+                  legalName:'CNY'
+              }
+              addAddress(this.form).then(res=>{
+                console.log(res)
+                if(res.statusCode === 0){
+                      this.$message({
+                          type:'success',
+                          message:'添加成功'
+                      })
+                      this.getAddressList()
+                  }
+              })
+
+
+          }else {
+              console.log('error submit!!');
+              return false;
+          }
+      })
+    },
     clickEdit(row,type){
       if(type){
         this.currentObj = row
+        currentObject = {...row}
       }
       this.tableData.forEach(item=>{
         if(item.id === row.id){
+          if(!type){
+            const {coinName,name,addr} = currentObject;
+            item.coinName =coinName
+            item.name =name
+            item.addr =addr
+          }
           item.isEdit =type
         }
       })
 
-      if(type){
-        this.currentObj = row
-      }
+      console.log(this.tableData)
+
     },
     close(){
       this.visible=false
@@ -166,6 +286,8 @@ export default {
   }
 }
 </script>
+
+
 
 <style lang='scss' scoped>
   .bg{
@@ -224,5 +346,12 @@ export default {
         }
       }
     }
+  }
+</style>
+
+<style scoped>
+  .coinWrap /deep/ .el-select-dropdown__item{
+    color: #606266;
+    font-weight: 400;
   }
 </style>

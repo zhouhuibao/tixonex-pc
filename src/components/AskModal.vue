@@ -12,8 +12,8 @@
                 {{title}}
             </div>
             <div class="btn">
-                <button @click="handleClose">取消</button>
-                <button>确定</button>
+                <div class="button" @click="handleClose">取消</div>
+                <div class="button" @click="onSubmit">确定</div>
             </div>
         </el-dialog>
     </div>
@@ -33,7 +33,8 @@ export default {
             required:true,
             type:String,
             default:''
-        }
+        },
+        
     },
     computed:{
         show:{
@@ -48,13 +49,15 @@ export default {
     methods:{
         open(){
             console.log('打开')
+            console.log(this)
         },
         handleClose(){
             this.$emit('close',false)
         },
         onSubmit() {
-            console.log('submit!');
+            this.$emit('confirm')
         }
+        
     }
 }
 </script>
@@ -70,9 +73,11 @@ export default {
     }
     .btn{
         text-align: center;
-        button{
+        .button{
+            display: inline-block;
             width: 150px;
             height: 45px;
+            line-height: 45px;
             border-radius: 4px;
             font-size: 16px;
             border: 0;

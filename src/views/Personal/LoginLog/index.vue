@@ -7,23 +7,23 @@
             :data="tableData"
             style="width: 100%">
             <el-table-column
-                prop="address1"
+                prop="operationTime"
                 label="操作时间"
             >
             </el-table-column>
             <el-table-column
                 align="center"
-                prop="address2"
+                prop="type"
                 label="操作类型"
             >
             </el-table-column>
             <el-table-column
                 align="center"
-                prop="address3"
+                prop="comment"
                 label="操作备注">
             </el-table-column>
             <el-table-column
-                prop="address4"
+                prop="success"
                 label="状态"
                 align="center"
             >
@@ -32,18 +32,12 @@
                 <TableEmpty></TableEmpty>
                 </template>
             </el-table>
-
-            <div class="elpage otcList">
-                <el-pagination
-                background
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="currentPage3"
-                :page-size="10"
-                layout="prev, pager, next, jumper"
-                :total="100">
-                </el-pagination>
-            </div>
+            
+            <page 
+                :total='total'
+                @changePage="changePage"
+            />
+           
         </div>
     </div>
 </template>
@@ -51,15 +45,19 @@
 <script>
 import TableEmpty from '@/components/TableEmpty.vue'
 import Breadcrumb from '@/components/Breadcrumb'
+import page from '@/components/page'
+import personal from '@/api/personal';
+const {loginLog} = personal
 export default {
     name:'orderLIst',
     data () {
         return {
-            currentPage3: 5,
+            currentPage: 1,
             formInline: {
                 user: '',
                 region: ''
             },
+            total:0,
             tableData:[]
         }
     },
@@ -78,39 +76,35 @@ export default {
         }
     },
     mounted(){
-      const arr = [];
-      for(let i=0;i<10;i+=1){
-        const obj ={};
-        obj.address1 = '2020-04-16 10:17:38';
-        obj.address2 = '登录';
-        obj.address3 = '暂无备注';
-        obj.address4 = '登录成功';
-        arr.push(obj)
-      }
-      this.tableData = arr
+        this.getLog()
     },
     components:{
         Breadcrumb,
-        TableEmpty  
+        TableEmpty,
+        page  
     },
     methods:{
-        
-        onSubmit() {
-            console.log('submit!');
-        },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-        },
+        getLog(){
+            loginLog({pageNo:this.currentPage,pageSize:10}).then(res=>{
+                const {statusCode,content,total} = res
+                if(statusCode === 0){
+                    this.tableData = content || []
+                    this.total = total
+                }
+            })
+        },  
+      
+        changePage(val){
+            this.currentPage = val
+            this.getLog()
+        }
     }
 }
 </script>
 
 <style lang='scss' scoped>
 .elpage{
-    margin-top: 80px;
+    padding-top: 80px;
     text-align: center;
     padding-bottom: 150px;
     .el-pagination{

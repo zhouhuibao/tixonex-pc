@@ -49,7 +49,7 @@
             prop="address2"
             label="单价"
             width="180">
-            <template slot-scope="scope"> <div style="color:#11BC70">{{scope.row.address2}}</div> </template>
+            <template slot-scope="scope"> <div class="greens">{{scope.row.address2}}</div> </template>
           </el-table-column>
           <el-table-column
             prop="address3"
@@ -184,6 +184,9 @@ export default {
 
 
 <style lang="scss" scoped>
+.greens{
+  color: $green;
+}
 .otc{
   .bg{
     background: $bgColor;

@@ -17,43 +17,43 @@
             </div>
 
 
-            <el-form ref="form" :model="form" label-width="auto">
+            <el-form ref="form" :rules="rules" :model="form" label-width="auto">
                 
-                <el-form-item label="姓名">
-                    <el-input v-model="form.desc" placeholder="请输入姓名"></el-input>
+                <el-form-item label="姓名" prop="bankUser">
+                    <el-input v-model="form.bankUser" placeholder="请输入姓名"></el-input>
                 </el-form-item>
                 
-                <el-form-item label="账号">
-                    <el-input v-model="form.desc" placeholder="请输入绑定支付宝账号"></el-input>
+                <el-form-item label="账号" prop="bankNo">
+                    <el-input v-model="form.bankNo" placeholder="请输入绑定支付宝账号"></el-input>
                 </el-form-item>
                 <el-form-item label="收款码">
                     <el-upload
                         class="avatar-uploader"
-                        action="https://jsonplaceholder.typicode.com/posts/"
+                        :action="action"
+                        :headers="headers"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload"
                     >
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        <div class="uploadTips">点击上传支付宝收款码</div>
+                        <img v-if="form.receiptCode" :src="form.receiptCode" class="avatar">
+                        <div v-else>
+                            <i class="el-icon-plus avatar-uploader-icon"></i>
+                            <div class="uploadTips">点击上传支付宝收款码</div>
+                        </div>
+                        
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="验证码">
+                <el-form-item label="验证码" prop="smsCode">
                     <div class="yzmCode">
-                        <el-input v-model="form.desc" placeholder="请输入验证码"></el-input>
-                        <button class="prBtn" style="">发送验证码</button>
+                        <el-input v-model="form.smsCode" placeholder="请输入验证码"></el-input>
+                        <GetVerifyCode class="prBtn" YZMtype="BANK" :info="codeInfo" :areaCode="codeInfo.areaCode" codeType="ADD_BANKER" />
                     </div>
                     
                 </el-form-item>
-                
-                
-                
                     <div class="btnWrap">
-                        <button class="button" @click="handleClose">取消</button>
-                        <button class="button">确定</button>
+                        <div class="button" @click="handleClose">取消</div>
+                        <div class="button" @click="onSubmit">确定</div>
                     </div>
-                    
                 </el-form>
         
         </el-dialog>
@@ -62,21 +62,48 @@
 </template>
 
 <script>
+import GetVerifyCode from '@/views/user/components/GetVerifyCode'
+import {uploadImage} from '@/api/upload'
+import personal from '@/api/personal';
+import { isEmpty } from '@/utils/auth';
+const {BindBankAddress} = personal
+
 export default {
     name:'WeChat',
     data () {
+        const {userInfo} = this.$store.state.user;
         return {
-            form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
+            action:uploadImage(),
+            headers:{
+                token:this.$store.state.user.token
             },
-            imageUrl: ''
+            form: {
+                bankUser: '',
+                bankName: '',
+                bankNo: '',
+                smsCode:'',
+                receiptCode:''
+            },
+            userInfo,
+            codeInfo:{
+                phone:userInfo.mobile,
+                areaCode:userInfo.areaCode
+            },
+            rules:{
+                bankUser:[
+                    { required: true, message: '请输入姓名', trigger: 'blur' }
+                ],
+                bankName: [
+                    { required: true, message: '请输入开户行', trigger: 'blur' }
+                ],
+                bankNo: [
+                    { required: true, message: '请输入支付宝账号', trigger: 'blur' }
+                ],
+                smsCode: [
+                    { required: true, message: '请输入验证码', trigger: 'blur' }
+                ],
+            },
+            
         }
     },
     props:{
@@ -84,6 +111,9 @@ export default {
             required:true,
             type:Boolean,
             default:false
+        },
+        info:{
+            type:Object
         }
     },
     computed:{
@@ -96,30 +126,82 @@ export default {
             }
         }
     },
+    components:{
+      GetVerifyCode
+    },
     methods:{
         open(){
-            console.log('打开')
+            const {info,form} = this;
+            if(info.bind){
+                Object.keys(form).forEach(item=>{
+                    let itemVal = info[item]
+                    form[item] = isEmpty(itemVal) ? itemVal : ''
+                })
+            }
         },
         handleClose(){
             this.$emit('close',false)
         },
         onSubmit() {
-            console.log('submit!');
+            this.$refs.form.validate((valid) => {
+                if (valid) {
+                    console.log(this.form)
+                    const submitData={
+                        ...this.form,
+                        bankType:1,
+                        name:this.$store.state.user.userInfo.realName,
+                        legalName:'CNY'
+                    }
+                    const {bind,id} = this.info
+                    if(bind){
+                        submitData.id =id
+                    }
+                    BindBankAddress(submitData,bind ? 'update' : 'add').then(res=>{
+                        if(res.statusCode === 0){
+                            this.$message({
+                                type:'success',
+                                message:'支付宝绑定成功'
+                            })
+                            this.$emit('close',false)
+                            this.form={
+                                bankUser: '',
+                                bankName: '',
+                                bankNo: '',
+                                smsCode:'',
+                                receiptCode:''
+                            }
+                        }
+                    })
+
+                }else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            })
         },
         handleAvatarSuccess(res, file) {
-            this.imageUrl = URL.createObjectURL(file.raw);
+            const {statusCode,content,errorMessage} = res
+            if(statusCode === 0){
+                this.form.receiptCode = content
+            }else{
+                this.$message({
+                    type:'error',
+                    message:errorMessage
+                })
+            }
         },
         beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
             const isLt2M = file.size / 1024 / 1024 < 2;
+            const imgTypeArr= ['image/png','image/jpeg']
+            const isImg = imgTypeArr.indexOf(file.type) !== -1 || false
 
-            if (!isJPG) {
-            this.$message.error('上传头像图片只能是 JPG 格式!');
+            if (imgTypeArr.indexOf(file.type) === -1) {
+                this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
             }
             if (!isLt2M) {
-            this.$message.error('上传头像图片大小不能超过 2MB!');
+                this.$message.error('上传头像图片大小不能超过 2MB!');
             }
-            return isJPG && isLt2M;
+            return isImg && isLt2M;
         }
     }
 }
@@ -144,17 +226,23 @@ export default {
         text-align: center;
     }
     .yzmCode{
-        padding-right: 120px;
+        padding-right: 170px;
         position: relative;
-        button{
+        .prBtn{
             position:absolute;
+            width: 160px;
+            height: 40px;
+            text-align: center;
+            padding: 0;
             right: 0;
-            top: 2px;
+            top: 0px;
+            line-height: 40px;
         }
     }
     .btnWrap{
         text-align: center;
         .button{
+            display: inline-block;
             width: 170px;
             height: 45px;
             line-height: 45px;
@@ -177,6 +265,11 @@ export default {
                 border: 1px solid #2E54EB;
             }
         }
+    }
+
+    .avatar-uploader .el-icon-plus{
+        font-size: 40px;
+        line-height: 160px;
     }
 }
     

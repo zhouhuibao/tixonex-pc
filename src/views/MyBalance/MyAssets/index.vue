@@ -3,6 +3,7 @@
       <el-table
         :data="tableData"
         ref="refTable"
+        @expand-change="expandChange"
         style="width: 100%">
         <el-table-column
         prop="address1"
@@ -38,9 +39,13 @@
         align="center"
         >
         <template  slot-scope="scope">
-            <div class="btnWrap">
-                <span @click="clickButton(scope.row,'cb')">充币</span>
-                <span @click="clickButton(scope.row,'tb')">提币</span>
+            <div class="btnWrap clearfix">
+                <span @click="clickButton(scope.row,'cb')">
+                    充币
+                </span>
+                <span @click="clickButton(scope.row,'tb')">
+                    提币
+                </span>
                 <span>交易</span>
             </div>
             
@@ -214,6 +219,10 @@ export default {
         },
         onSubmit() {
         console.log('submit!');
+      },
+      expandChange(row,type){
+          console.log(row)
+          console.log(type)
       }
     }
 }
@@ -222,12 +231,18 @@ export default {
 <style lang='scss' scoped>
     .btnWrap{
         span{
+            float: left;
+            position: relative;
             color: #2E54EB;
             font-size: 16px;
             margin-right: 30px;
             cursor: pointer;
             &:last-child{
                 margin: 0;
+            }
+            i{
+                position: absolute;
+                bottom: 0;
             }
         }
     }
@@ -236,7 +251,7 @@ export default {
         .jiantou{
             position: absolute;
             top: -33px;
-            right: 106px;
+            right: 115px;
             background: #fff;
             color: #EBEEF5;
         }
@@ -281,7 +296,7 @@ export default {
         .jiantou{
             position: absolute;
             top: -53px;
-            right: 42px;
+            right: 55px;
             background: #fff;
             color: #EBEEF5;
         }

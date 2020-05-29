@@ -28,20 +28,25 @@
         
       </div>
       <div class="headerInfo clearfix">
-        <div class="infoItem"></div>
-        <div class="infoItem"></div>
-        <div class="infoItem">
-          <router-link to="/user/login" style="display:block;font-size:16px;" exact>
-            {{$t('header.login')}}
-            <div class="sub"></div>
-          </router-link>
+        <div class="infoItem" v-if="isLogin">
+          <i class="iconfont iconuser"></i>
+           <span class="name">{{userInfo.userName}}</span>
+          </div>
+        <div v-else>
+          <div class="infoItem" >
+            <router-link to="/user/login" style="display:block;font-size:16px;" exact>
+              {{$t('header.login')}}
+              <div class="sub"></div>
+            </router-link>
+          </div>
+          <div class="infoItem" style="margin-right:28px">
+            <router-link to="/user/register" style="display:block;font-size:16px;" exact>
+              {{$t('header.register')}}
+              <div class="sub"></div>
+            </router-link>
+          </div>
         </div>
-        <div class="infoItem">
-          <router-link to="/user/register" style="display:block;font-size:16px;" exact>
-            {{$t('header.register')}}
-            <div class="sub"></div>
-          </router-link>
-        </div>
+        
         <div class="infoItem">
           <el-dropdown  @command="handleCommand">
             <div class="el-dropdown-link">
@@ -65,6 +70,7 @@
 </template>
 
 <script>
+import { isEmpty } from '@/utils/auth'
 
 
 export default {
@@ -86,7 +92,9 @@ export default {
         ],
         navList:[],
         lang:localStorage.lang || 'cn',
-        langName:''
+        langName:'',
+        isLogin:isEmpty(this.$store.state.user.token),
+        userInfo:this.$store.state.user.userInfo
       }
     },
     watch:{
@@ -94,7 +102,16 @@ export default {
         deep:true,
         handler(newVal){
           this.setnavList()
-        }
+        },
+      },
+      '$route':{
+        deep:true,
+        handler(newVal){
+          console.log(this.$store.state.user.token)
+          console.log(this.$store.state.user.userInfo)
+          this.isLogin = isEmpty(this.$store.state.user.token)
+          this.userInfo = this.$store.state.user.userInfo
+        },
       }
     },
     mounted(){
@@ -208,6 +225,18 @@ export default {
       float: left;
       margin-right: 28px;
       line-height: 100px;
+      position: relative;
+      .iconuser{
+        font-size: 18px;
+        display: inline;
+        color: #666;
+      }
+      .name{
+        font-size: 16px;
+        display: inline;
+        margin-left: 5px;
+        cursor: pointer;
+      }
       a{
         color: #333333;
       }

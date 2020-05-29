@@ -12,8 +12,12 @@
                     <div class="layui-col-xs4">
                         <div class="imgWrap">
                             <img src="./../../../../public/img/tixonexImages/yinhangkaBG.png" alt="">
-                            <div class="imgContent" @click="bankVisible = true">
-                                <div style="display:inline-block">
+                            <div class="imgContent" @click="openModal(backInfo,'bankVisible')">
+                                <div v-if="backInfo.bind" style="display:inline-block">
+                                    <p>{{backInfo.bankUser}}</p>
+                                    <p>{{backInfo.bankNo}}</p>
+                                </div>
+                                <div v-else style="display:inline-block">
                                     <p>点击激活</p>
                                     <p>(请填写银行卡信息)</p>
                                 </div>
@@ -24,8 +28,12 @@
                     <div class="layui-col-xs4">
                         <div class="imgWrap" style="margin: 0 auto;">
                             <img src="./../../../../public/img/tixonexImages/weiixnzhifu.png" alt="">
-                            <div class="imgContent" @click="WeChatVisible = true">
-                                <div style="display:inline-block">
+                            <div class="imgContent" @click="openModal(wxInfo,'WeChatVisible')">
+                                <div v-if="wxInfo.bind" style="display:inline-block">
+                                    <p>{{wxInfo.bankUser}}</p>
+                                    <p>{{wxInfo.bankNo}}</p>
+                                </div>
+                                <div v-else style="display:inline-block">
                                     <p>点击激活</p>
                                     <p>(请填写微信信息)</p>
                                 </div>
@@ -37,8 +45,12 @@
                         <div class="clearfix">
                             <div class="imgWrap" style="float:right">
                                 <img src="./../../../../public/img/tixonexImages/zhifubaozhifu.png" alt="">
-                                <div class="imgContent" @click="AliPayVisible = true">
-                                    <div style="display:inline-block">
+                                <div class="imgContent" @click="openModal(zfbInfo,'AliPayVisible')">
+                                    <div v-if="wxInfo.bind" style="display:inline-block">
+                                        <p>{{zfbInfo.bankUser}}</p>
+                                        <p>{{zfbInfo.bankNo}}</p>
+                                    </div>
+                                    <div v-else style="display:inline-block">
                                         <p>点击激活</p>
                                         <p>(请填写支付宝信息)</p>
                                     </div>
@@ -52,9 +64,9 @@
             </div>
         </div>
       </div>
-      <Bank :visible="bankVisible" @close="(v)=>{this.close(v,'bankVisible')}" />
-      <AliPay :visible="AliPayVisible" @close="(v)=>{this.close(v,'AliPayVisible')}" />
-      <WeChat :visible="WeChatVisible" @close="(v)=>{this.close(v,'WeChatVisible')}" />
+      <Bank :visible="bankVisible" :info="backInfo"  @close="(v)=>{this.close(v,'bankVisible')}" />
+      <AliPay :visible="AliPayVisible" :info="zfbInfo" @close="(v)=>{this.close(v,'AliPayVisible')}" />
+      <WeChat :visible="WeChatVisible" :info="wxInfo" @close="(v)=>{this.close(v,'WeChatVisible')}" />
   </div>
 </template>
 
@@ -63,12 +75,23 @@ import Breadcrumb from '@/components/Breadcrumb'
 import Bank from './../components/payType/Bank'
 import AliPay from './../components/payType/Alipay'
 import WeChat from './../components/payType/WeChat'
+import personal from '@/api/personal';
+const {bankAddresses} = personal
 export default {
     name:'payType',
     data () {
         return {
             form: {
                 name: '',
+            },
+            backInfo:{
+                bind:false
+            },
+            wxInfo:{
+                bind:false
+            },
+            zfbInfo:{
+                bind:false
             },
             code:'',
             bankVisible:false,
@@ -97,13 +120,47 @@ export default {
         AliPay,
         WeChat
     },
-   
+    mounted(){
+        this.getBindAddress()
+    },
     methods:{
+        getBindAddress(){
+            bankAddresses().then(res=>{
+                const {statusCode,content} = res
+                const bindArr = []
+                
+                if(statusCode === 0){
+                    content.forEach(item=>{
+                        if(item.bankType===0){
+                            this.backInfo={
+                                ...item,
+                                bind:true
+                            }
+                        }else if(item.bankType===1){
+                            this.wxInfo={
+                                ...item,
+                                bind:true
+                            }
+                        }else if(item.bankType === 2){
+                            this.zfbInfo={
+                                ...item,
+                                bind:true
+                            }
+                        }
+                    })
+                }
+            })
+        },
         close(v,type){
             this[type] =v
+            this.getBindAddress()
         },
         onSubmit() {
             console.log('submit!');
+        },
+        openModal(info,type){
+            console.log(info)
+            this[type] = true
         }
     }
 }

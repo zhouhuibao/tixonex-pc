@@ -14,7 +14,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     .layout{
         position: fixed;
         width: 100%;

@@ -24,17 +24,18 @@ const service = axios.create({
 //  timeout: Config.timeout // 请求超时时间
   method:'post' , // 默认是post
   traditional:true,
-
 })
  
 // request拦截器
 service.interceptors.request.use(config => {
-  const {method,url,data,requestType} = config
-  if(method === 'get' || method === 'GET'){
+  const {method,url,data,requestType,isToken} = config
+  if(method === 'get' || method === 'GET' || method === 'DELETE' || method === 'delete'){
     if(isEmpty(data)){
       config.url = `${url}?${Qs.stringify(data)}`
     }
   }
+
+  
 
 
   if(requestType !== 'JSON'){
@@ -43,8 +44,8 @@ service.interceptors.request.use(config => {
     }]
   }
 
-  if(url !== 'admin/user/login'){
-    config.headers.token = getToken()
+  if(!isToken){
+    config.headers.token = store.state.user.token
   }
 
   

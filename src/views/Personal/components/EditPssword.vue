@@ -16,39 +16,40 @@
                 <div class="title">
                     <img @click="handleClose" src="./../../../../public/img/tixonexImages/baozhang.png" alt="">
                     {{$t('PostersList.xgdlmm')}}
+
                 </div>
                 <div class="title">
                     <img @click="handleClose" src="./../../../../public/img/tixonexImages/shouji.png" alt="">
-                    136****2819
+                    {{userInfo.mobile}}
                 </div>
-                <el-form  ref="form" :model="form">
+                <el-form class="userLayout" :rules="rules"  ref="form" :model="form">
                     <el-form-item class="clearfix yzCode imgCode">
                         <div class="codeBox">
-                        <input class="inputText" :placeholder="$t('user.imgyzCode')" type="text" v-model="form.name4">
+                        <el-input class="inputText" :placeholder="$t('user.imgyzCode')" type="text" v-model="form.captchaImgCode" />
                         </div>
                         <div class="codeBox">
-                        8456
+                            <GetWordJpg ref="wordJpg" :phone="userInfo.mobile" :code="userInfo.areaCode" />
                         </div>
                     </el-form-item>
-                    <el-form-item class="clearfix yzCode dxCode">
+                    <el-form-item class="clearfix yzCode dxCode" prop="verificationCode">
                         <div class="codeBox">
-                        <input class="inputText" :placeholder="$t('user.dxyzCode')" type="text" v-model="form.name5">
+                        <el-input class="inputText" :placeholder="$t('user.dxyzCode')" type="text" v-model="form.verificationCode" />
                         </div>
                         <div class="codeBox">
-                        {{ $t('user.dxyzmBtn') }}
+                            <GetVerifyCode :info="codeInfo" :areaCode="codeInfo.areaCode" codeType="PASSWORD_FORGET" />
                         </div>
                     </el-form-item>
-                    <el-form-item>
-                        <input class="inputText" :placeholder="$t('user.shuzimima')" type="password" v-model="form.name2">
+                    <el-form-item prop="password">
+                        <el-input class="inputText" :placeholder="$t('user.shuzimima')" type="password" autocomplete="new-password" v-model="form.password" />
                     </el-form-item>
-                    <el-form-item>
-                        <input class="inputText" :placeholder="$t('user.querenmima')" type="password" v-model="form.name3">
+                    <el-form-item prop="password2">
+                        <el-input class="inputText" :placeholder="$t('user.querenmima')" type="password" autocomplete="new-password" v-model="form.password2" />
                     </el-form-item>
-                   
                 </el-form>
-                <button class="submitBtn">
+                <el-button type="primary" class="tjiao" @click="onSubmit">{{ $t('PostersList.tj') }}</el-button>
+                <!-- <button class="submitBtn">
                     {{$t('PostersList.tj')}}
-                </button>
+                </button> -->
             </div>
 
         </el-dialog>
@@ -57,19 +58,55 @@
 </template>
 
 <script>
+import GetWordJpg from '@/views/user/components/GetWordJpg'
+import GetVerifyCode from '@/views/user/components/GetVerifyCode'
+import {validPassword} from '@/utils/validate'
+import {resetPwd} from '@/api/user'
 export default {
     name:'EditPssword',
     data () {
+        const {userInfo} = this.$store.state.user;
+        console.log(this.$store)
+        const validatePass = (rule, value, callback) => {
+            if (!validPassword(value)) {
+                callback(new Error('密码长度6-15位，数字字母组成'));
+            } else {
+                callback();
+            }
+        };
+        const validatePass2 = (rule, value, callback) => {
+            if (!validPassword(value)) {
+                callback(new Error('密码长度6-15位，数字字母组成'));
+            }else if (value !== this.form.password) {
+                callback(new Error('两次输入密码不一致!'));
+            } else {
+                callback();
+            }
+        };
+
         return {
             form:{
-            name1:'',
-            name2:'',
-            name3:'',
-            name4:'',
-            name5:'',
-            name6:'',
-            name7:'',
-            checked:false
+                verificationCode:'',
+                captchaImgCode:'',
+                password:'',
+                password2:'',
+            },
+            userInfo,
+            codeInfo:{
+                captchaImgCode:'',
+                phone:userInfo.mobile,
+                areaCode:userInfo.areaCode
+            },
+            rules:{
+                verificationCode:[
+                    { required: true, message: '请输入验证码', trigger: 'blur' }
+                ],
+                password: [
+                    { validator: validatePass, trigger: 'blur' }
+                ],
+                password2: [
+                    { validator: validatePass2, trigger: 'blur' }
+                ],
             }
         }
     },
@@ -90,15 +127,61 @@ export default {
             }
         }
     },
+    watch:{
+        'form.captchaImgCode':{
+            handler(newVal){
+                this.codeInfo ={
+                    ...this.codeInfo,
+                    captchaImgCode:newVal,
+                }
+                console.log(this.codeInfo)
+            }
+        }
+    },
+    components:{
+      GetWordJpg,
+      GetVerifyCode
+    },
     methods:{
         open(){
-            console.log('打开')
+            this.$nextTick(() => {
+                this.$refs.wordJpg.updateCode()
+            })
         },
+        
         handleClose(){
             this.$emit('close',false)
         },
         onSubmit() {
-            console.log('submit!');
+            this.$refs.form.validate((valid) => {
+                if (valid) {
+                    const {password,verificationCode} = this.form;
+                    const parmasData={
+                        areaCode:this.userInfo.areaCode,
+                        phone:this.userInfo.mobile,
+                        password,
+                        verificationCode,
+                    }
+                    resetPwd(parmasData).then(res=>{
+                        if(res.statusCode === 0){
+                            this.$message({
+                                type:'success',
+                                message:'登录密码修改成功'
+                            })
+                            this.$emit('close',false)
+                            this.form={
+                                verificationCode:'',
+                                captchaImgCode:'',
+                                password:'',
+                                password2:''
+                            }
+                        }
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
         }
     }
 }
@@ -210,7 +293,7 @@ export default {
         
         .dxCode{
             .codeBox{
-            &:last-child{
+            &:nth-child(2){
             position:absolute;
             top: 0px;
             right: 10px;
@@ -254,4 +337,32 @@ export default {
   
 
 }
+</style>
+<style scoped>
+  .userLayout /deep/ .el-input__inner{
+    border: 0;
+    padding: 0;
+    height: 38px;
+  }
+  .userLayout /deep/ .el-input__inner::-webkit-input-placeholder{
+			color: #999999;
+  }
+  .userLayout /deep/ .el-input__inner::-moz-placeholder{
+			color: #999999;
+  }
+  .userLayout /deep/ .el-input__inner:-ms-input-placeholder{
+			color: #999999;
+  }
+  .userLayout /deep/ .el-input__inner:-moz-placeholder{
+			color: #999999;
+  }
+  .userLayout /deep/ .el-input__suffix{
+    color: green;
+  }
+  .modalWrapper /deep/ .tjiao{
+      margin-top: 50px;
+      height: 50px;
+      width: 100%;
+  }
+  
 </style>

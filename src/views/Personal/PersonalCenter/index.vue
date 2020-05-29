@@ -12,8 +12,8 @@
           <div class="userInfo">
               <img src="./../../../../public/img/tixonexImages/yonghuxinxi.png" alt="">
               <div class="nameWrap">
-                  <p>用户姓名：李潇潇</p>
-                  <p>手机号码：139****2395</p>
+                  <p>用户姓名：{{userInfo.realName || userInfo.userName}}</p>
+                  <p>手机号码：{{userInfo.mobile}}</p>
               </div>
           </div>
           
@@ -105,8 +105,12 @@ export default {
     data () {
       return {
           EditPsswordVisible:false,
-          EditYJPsswordVisible:false
+          EditYJPsswordVisible:false,
+          userInfo:this.$store.state.user.userInfo
       }
+    },
+    mounted(){
+      console.log(this.$store.state.user)
     },
     methods:{
       closeModal(v,type){

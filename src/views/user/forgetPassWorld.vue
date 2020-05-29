@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="userLayout">
     <div class="titleWrapper clearfix">
       <div class="title">{{ $t('user.czdlmm') }}</div>
       <div class="close">
@@ -9,44 +9,45 @@
         
       </div>
     </div>
-    <el-form  ref="form" :model="form">
-        <el-form-item class="clearfix">
-          <div class="address">
+    <el-form  ref="form" status-icon :rules="rules" :model="form">
+        <el-form-item class="clearfix codeWrap" prop="phone">
+          <div class="address" @click="visible = true">
             <div class="clearfix">
               <div class="img">
                 <img src="./../../../public/img/tixonexImages/Bitmap.png" alt="">
               </div>
               <div class="content">
-                +86
+                +{{nationCode.code}}
                 <i class="el-icon-caret-bottom"></i>
               </div>
             </div>
           </div>
           <div class="input">
-            <input class="inputText" :placeholder="$t('user.mobileNumber')" type="text" v-model="form.name1">
+            <el-input class="inputText" @blur="phoneBlur" :placeholder="$t('user.mobileNumber')" type="text" v-model="form.phone" />
           </div>
+          <NationalCode class="code" :visible="visible" @close="visible =false" @changeCode="changeCode" />
         </el-form-item>
         <el-form-item class="clearfix yzCode imgCode">
             <div class="codeBox">
-              <input class="inputText" :placeholder="$t('user.imgyzCode')" type="text" v-model="form.name4">
+              <el-input class="inputText" :placeholder="$t('user.imgyzCode')" type="text" v-model="form.captchaImgCode" />
             </div>
             <div class="codeBox">
-              8456
+              <GetWordJpg ref="wordJpg" :phone="form.phone" :code="nationCode.code" />
             </div>
         </el-form-item>
-        <el-form-item class="clearfix yzCode dxCode">
+        <el-form-item class="clearfix yzCode dxCode" prop="verificationCode">
             <div class="codeBox">
-              <input class="inputText" :placeholder="$t('user.dxyzCode')" type="text" v-model="form.name5">
+              <el-input class="inputText" :placeholder="$t('user.dxyzCode')" type="text" v-model="form.verificationCode" />
             </div>
             <div class="codeBox">
-              {{ $t('user.dxyzmBtn') }}
+              <GetVerifyCode :info="form" :areaCode="nationCode.code" codeType="PASSWORD_FORGET" />
             </div>
         </el-form-item>
-        <el-form-item>
-            <input class="inputText" :placeholder="$t('user.shuzimima')" type="password" v-model="form.name2">
+        <el-form-item prop="password">
+            <el-input class="inputText" :placeholder="$t('user.shuzimima')" type="password" v-model="form.password" />
         </el-form-item>
-        <el-form-item>
-            <input class="inputText" :placeholder="$t('user.querenmima')" type="password" v-model="form.name3">
+        <el-form-item prop="password2">
+            <el-input class="inputText" :placeholder="$t('user.querenmima')" type="password" v-model="form.password2" />
         </el-form-item>
         
         <el-form-item class="submitbtn">
@@ -60,31 +61,105 @@
 </template>
 
 <script>
+import NationalCode from './components/NationCode'
+import GetWordJpg from './components/GetWordJpg'
+import GetVerifyCode from './components/GetVerifyCode'
+import {validPassword} from '@/utils/validate'
+import { resetPwd } from '@/api/user';
 export default {
     name:'forgetPassWorld',
     data () {
+      const validatePass = (rule, value, callback) => {
+        if (!validPassword(value)) {
+          callback(new Error('密码长度6-15位，数字字母组成'));
+        } else {
+          callback();
+        }
+      };
+      const validatePass2 = (rule, value, callback) => {
+        if (!validPassword(value)) {
+          callback(new Error('密码长度6-15位，数字字母组成'));
+        }else if (value !== this.form.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
+
+      
+
       return {
+        nationCode:{
+          code:86
+        },
+        visible:false,
+        rules:{
+          phone:[
+            { required: true, message: '请输入手机号', trigger: 'blur' }
+          ],
+          verificationCode:[
+            { required: true, message: '请输入验证码', trigger: 'blur' }
+          ],
+          password: [
+            { validator: validatePass, trigger: 'blur' }
+          ],
+          password2: [
+            { validator: validatePass2, trigger: 'blur' }
+          ],
+          
+        },
         form:{
-          name1:'',
-          name2:'',
-          name3:'',
-          name4:'',
-          name5:'',
-          name6:'',
-          name7:'',
-          checked:false
+          password :'',
+          phone :'',
+          verificationCode :'',
+          captchaImgCode:'',
+          password2:'',
         }
       }
     },
+    components:{
+      NationalCode,
+      GetWordJpg,
+      GetVerifyCode
+    },
     methods:{
       onSubmit(){
-        console.log(1)
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            const {phone,password,verificationCode} = this.form;
+              const parmasData={
+                areaCode:this.nationCode.code,
+                phone,
+                password,
+                verificationCode,
+              }
+              resetPwd(parmasData).then(res=>{
+                if(res.statusCode === 0){
+                  this.$message({
+                    type:'success',
+                    message:'密码重置成功'
+                  })
+                }
+              })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      changeCode(data){
+        console.log(data)
+        this.nationCode = data
+      },
+      phoneBlur(){
+        // 失去焦点时更换图片验证码
+        this.$refs.wordJpg.updateCode()
       }
     }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .userContent{
   .titleWrapper{
     .title{
@@ -99,6 +174,15 @@ export default {
     }
     margin-bottom: 40px;
   }
+  .codeWrap{
+      position: relative;
+      .code{
+        position: absolute;
+        bottom: -202px;
+        left: 0;
+        z-index: 11111;
+      }
+  }
   .el-form-item{
     border-bottom: 1px solid #CCCCCC;
     .el-form-item__content{
@@ -106,7 +190,7 @@ export default {
     }
     .address{
       float: left;
-      width: 100px;
+      width: 110px;
       padding-left: 4px;
         .img{
           float: left;
@@ -120,7 +204,7 @@ export default {
         }
         .content{
           float: left;
-          width: 60px;
+          width: 70px;
           text-align: right;
           padding-right: 5px;
           line-height: 40px;
@@ -131,7 +215,7 @@ export default {
     
     .input{
       width: 100%;
-      padding-left:100px;
+      padding-left:110px;
       box-sizing: border-box;
     }
     .inputText{
@@ -168,7 +252,7 @@ export default {
 
   .imgCode{
         .codeBox{
-          &:last-child{
+          &:nth-child(2){
           position:absolute;
           top: -10px;
           right: 10px;
@@ -185,7 +269,7 @@ export default {
       
       .dxCode{
         .codeBox{
-          &:last-child{
+          &:nth-child(2){
           position:absolute;
           top: 0px;
           right: 10px;
@@ -219,16 +303,32 @@ export default {
           }
         
       }
-  // .el-input{
-  //   .el-input__inner{
-  //   border: none;
-  //   border-bottom: 1px solid #CCCCCC;
-  // }
 
-  // }
-  
 
 }
   
 
+</style>
+
+<style scoped>
+  .userLayout /deep/ .el-input__inner{
+    border: 0;
+    padding: 0;
+    height: 38px;
+  }
+  .userLayout /deep/ .el-input__inner::-webkit-input-placeholder{
+			color: #999999;
+  }
+  .userLayout /deep/ .el-input__inner::-moz-placeholder{
+			color: #999999;
+  }
+  .userLayout /deep/ .el-input__inner:-ms-input-placeholder{
+			color: #999999;
+  }
+  .userLayout /deep/ .el-input__inner:-moz-placeholder{
+			color: #999999;
+  }
+  .userLayout /deep/ .el-input__suffix{
+    color: green;
+  }
 </style>

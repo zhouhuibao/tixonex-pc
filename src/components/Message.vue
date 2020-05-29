@@ -19,7 +19,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     .message{
         width: 100%;
         height: 60px;

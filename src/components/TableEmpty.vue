@@ -21,7 +21,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
     .noData{
         padding: 50px;
         p{
